@@ -8,6 +8,7 @@
 
 function configure(express, app) {
   app.use(express.static(__dirname + '/public'));
+  console.log('configured!');
   // top kek
 }
 
