@@ -1,0 +1,11 @@
+{
+  "name": "osnova",
+  "version": "0.0.2",
+  "description": "Basic functionality for Express-Passport-Mongoose-Socket.IO-based server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sasha snov Noviel <snov.contact@gmail.com>",
+  "license": "ISC"
+}
