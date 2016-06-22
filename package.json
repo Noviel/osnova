@@ -1,8 +1,8 @@
 {
   "name": "osnova",
-  "version": "0.0.4",
+  "version": "0.0.3",
   "description": "Basic functionality for Express-Passport-Mongoose-Socket.IO-based server",
-  "main": "index.js",
+  "main": "build/main.server.js",
   "scripts": {
     "start": "node --use_strict start.js",
     "build-client": "webpack",
