@@ -1,9 +1,7 @@
 // Created by snov on 29.06.2016.
 
 const Http     = require('http'),
-  path         = require('path'),
-  contentTypes = require('../utils/content.types'),
-  sysInfo      = require('../utils/sys.info');
+  path         = require('path');
 
 import session from './session';
 import express from 'express';

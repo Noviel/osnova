@@ -1,69 +1,34 @@
 {
-  "_args": [
-    [
-      {
-        "raw": "osnova",
-        "scope": null,
-        "escapedName": "osnova",
-        "name": "osnova",
-        "rawSpec": "",
-        "spec": "latest",
-        "type": "tag"
-      },
-      "G:\\creation\\digital\\web\\osnova"
-    ]
-  ],
-  "_from": "osnova@latest",
-  "_id": "osnova@0.0.10",
-  "_inCache": true,
-  "_installable": true,
-  "_location": "/osnova",
-  "_nodeVersion": "5.11.1",
-  "_npmOperationalInternal": {
-    "host": "packages-16-east.internal.npmjs.com",
-    "tmp": "tmp/osnova-0.0.10.tgz_1466620110679_0.48330112895928323"
-  },
-  "_npmUser": {
-    "name": "sonsnov",
-    "email": "snov.contact@gmail.com"
-  },
-  "_npmVersion": "3.8.6",
-  "_phantomChildren": {},
-  "_requested": {
-    "raw": "osnova",
-    "scope": null,
-    "escapedName": "osnova",
-    "name": "osnova",
-    "rawSpec": "",
-    "spec": "latest",
-    "type": "tag"
-  },
-  "_requiredBy": [
-    "#USER"
-  ],
-  "_resolved": "https://registry.npmjs.org/osnova/-/osnova-0.0.10.tgz",
-  "_shasum": "5859b799c74c8df9e9426bf60d8e589c03ff0e36",
-  "_shrinkwrap": null,
-  "_spec": "osnova",
-  "_where": "G:\\creation\\digital\\web\\osnova",
   "author": {
     "name": "Sasha snov Noviel",
     "email": "snov.contact@gmail.com"
   },
-  "dependencies": {},
+  "dependencies": {
+    "bcryptjs": "^2.3.0",
+    "bluebird": "^3.4.3",
+    "body-parser": "^1.15.2",
+    "connect-mongo": "^1.2.1",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.14.0",
+    "express-session": "^1.14.0",
+    "mongoose": "^4.5.1",
+    "object-assign": "^4.1.0",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "passport.socketio": "^3.6.2",
+    "pug": "^2.0.0-beta3",
+    "random-js": "^1.0.8",
+    "socket.io": "^1.4.8"
+  },
   "description": "Basic functionality for Express-Passport-Mongoose-Socket.IO-based server",
   "devDependencies": {
-    "babel-core": "^6.10.4",
-    "babel-loader": "^6.2.4",
-    "babel-preset-es2015": "^6.9.0",
-    "babel-preset-stage-0": "^6.5.0"
+    "babel-cli": "^6.10.1",
+    "babel-core": "^6.9.1",
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-es2016": "^6.11.3",
+    "babel-preset-es2017": "^6.14.0",
+    "babel-preset-latest": "^6.14.0"
   },
-  "directories": {},
-  "dist": {
-    "shasum": "5859b799c74c8df9e9426bf60d8e589c03ff0e36",
-    "tarball": "https://registry.npmjs.org/osnova/-/osnova-0.0.10.tgz"
-  },
-  "gitHead": "bc69c7f89c77ba9e51b598ba25d0009679a7f7ba",
   "license": "ISC",
   "main": "build/index.js",
   "maintainers": [
@@ -74,11 +39,9 @@
   ],
   "name": "osnova",
   "optionalDependencies": {},
-  "readme": "ERROR: No README data found!",
+  "readme": "README.md",
   "scripts": {
     "build": "babel src -d build",
-    "start": "node --use_strict start.js",
-    "start-dev": "hjs-dev-server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "version": "0.0.10"
