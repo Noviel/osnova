@@ -42,7 +42,10 @@
   "readme": "README.md",
   "scripts": {
     "build": "babel src -d build",
+    "major-release": "npm --no-git-tag-version version major && npm publish",
+    "minor-release": "npm --no-git-tag-version version minor && npm publish",
+    "patch-release": "npm --no-git-tag-version version patch && npm publish",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "0.0.10"
+  "version": "0.1.0"
 }
