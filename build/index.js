@@ -44,7 +44,7 @@ var data = {
 
 // private functions
 var fn = {
-  defActions: function defActions(osnova) {
+  defPreinitActions: function defPreinitActions(osnova) {
     return [{
       action: _session2.default,
       args: [osnova.express, {
@@ -87,7 +87,7 @@ var fn = {
     data.actions[state].push({ action: action, args: argsF });
   },
   addDefaultPreInitActions: function addDefaultPreInitActions(osnova) {
-    var acts = this.defActions(osnova);
+    var acts = this.defPreinitActions(osnova);
     for (var i = 0; i < acts.length; i++) {
       this.addAction(osnova, 'preinit', acts[i].action, acts[i].args);
     }

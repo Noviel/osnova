@@ -33,7 +33,7 @@ const data = {
 // private functions
 const fn =  {
 
-  defActions(osnova) {
+  defPreinitActions(osnova) {
     return [
       {
         action: session,
@@ -79,7 +79,7 @@ const fn =  {
 
 
   addDefaultPreInitActions(osnova) {
-    const acts = this.defActions(osnova);
+    const acts = this.defPreinitActions(osnova);
     for (let i = 0; i < acts.length; i++) {
       this.addAction(osnova, 'preinit', acts[i].action, acts[i].args);
     }
