@@ -106,7 +106,7 @@ var OSNOVA = function(opts) {
     opts.socketio = false;
   }
 
-  this.__version  = '0.5.2';
+  this.__version  = require('../package.json').version;
   this.opts       = opts;
 
   let root = null;
