@@ -23,10 +23,11 @@ function launch(opts) {
   });
 
   const target = opts.config;
+  target.host = target.host || { port: 8080, ip: 'localhost'};
 
-  const port = target.host.port;
-  const ip = target.host.ip;
-  const threads = target.threads;
+  const port = target.host.port || 8080;
+  const ip = target.host.ip || 'localhost';
+  const threads = target.threads || 1;
 
   let workers = [];
 

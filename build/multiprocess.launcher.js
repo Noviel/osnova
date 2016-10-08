@@ -20,10 +20,11 @@ function launch(opts) {
   });
 
   var target = opts.config;
+  target.host = target.host || { port: 8080, ip: 'localhost' };
 
-  var port = target.host.port;
-  var ip = target.host.ip;
-  var threads = target.threads;
+  var port = target.host.port || 8080;
+  var ip = target.host.ip || 'localhost';
+  var threads = target.threads || 1;
 
   var workers = [];
 

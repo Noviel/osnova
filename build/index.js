@@ -196,7 +196,7 @@ OSNOVA.prototype.listen = function () {
       config = this.config;
 
   var server = http.listen(0 /*config.target.host.port*/, 'localhost' /*config.target.host.ip*/, function () {
-    console.log('OSNOVA::worker pid:' + process.pid + ' started... [' + config.target.host.ip + ':' + config.target.host.port + ']');
+    console.log('OSNOVA::worker pid:' + process.pid + ' started...');
   });
 
   // Listen to messages sent from the master. Ignore everything else.
