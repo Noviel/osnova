@@ -109,9 +109,17 @@ var OSNOVA = function(opts) {
   this.__version  = '0.5.2';
   this.opts       = opts;
 
-  const Config = require('./config/core')();
 
-  this.config = defaults(opts.core, Config);
+  if (!opts.master) {
+    let root = null;
+    if (opts.core && opts.core.paths && opts.core.paths.root) {
+      root = opts.core.paths.root;
+    }
+    const Config = require('./config/core')(root);
+    this.config = defaults(opts.core, Config);
+  } else {
+    this.config = opts.core;
+  }
 };
 
 OSNOVA.prototype = Object.create(null);
