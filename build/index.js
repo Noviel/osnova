@@ -169,7 +169,7 @@ OSNOVA.prototype.launch = function () {
     fn.addAction(this, 'starting', this.opts.start);
   }
 
-  // we need to launch init function both to master and workers
+  // we need to launch init function both on master and workers
   if ((0, _core.isFunction)(this.opts.init)) {
     fn.addAction(this, 'init', this.opts.init);
     fn.addAction(this, 'master', this.opts.init);

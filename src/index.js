@@ -162,7 +162,7 @@ OSNOVA.prototype.launch = function () {
     fn.addAction(this, 'starting', this.opts.start);
   }
 
-  // we need to launch init function both to master and workers
+  // we need to launch init function both on master and workers
   if (isFunction(this.opts.init)) {
     fn.addAction(this, 'init', this.opts.init);
     fn.addAction(this, 'master', this.opts.init);
@@ -221,7 +221,6 @@ OSNOVA.prototype.start = function () {
 };
 
 OSNOVA.prototype.on = function(state, action, args) { fn.addAction(this, state, action, args); };
-
 
 export default function OSNOVA(opts) {
   const osnova = new OSNOVA(opts);
