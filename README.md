@@ -38,23 +38,28 @@ Wow such ready-to-go much time to watch anime!
 ####osnova object
 
 Any component of OSNOVA can be accessed from `osnova` object.
-Functions `init` and `start` from `opts` of `OSNOVA.Server(opts)`
-will be called with `osnova` object as a parameter when the time comes. 
-These functions are a good place to put the functionality of the application.
-There is no way to get this object directly in a random location in code.
+
+Access to `osnova` object:
+
+- Functions `init` and `start` from `opts` of `OSNOVA.Server(opts)` 
+will be called with `osnova` object as a parameter when their time comes.
     
-    const workerOpts = {
-        init: (osnova) => {
-            myExpressRoute(osnova);
-            IPCStuffWorker(osnova);
-        },
-        start: (osnova) => {
-            allComponentsAreInitializedLetsRock(osnova);
+        const workerOpts = {
+            init: (osnova) => {
+                myExpressRoute(osnova);
+                IPCStuffWorker(osnova);
+            },
+            start: (osnova) => {
+                allComponentsAreInitializedLetsRock(osnova);
+            }
         }
-    }
-    const osnovaWorker = OSNOVA.Server(workerOpts);
+        const osnovaWorker = OSNOVA.Server(workerOpts);
+    
+- `OsnovaServer.use()` takes function that will be executed with `osnova` as first parameter. See [OsnovaServer](###OsnovaServer)
 
+There is no way to get this object directly in any other location in code.
 
+   
 #####osnova.express
     function myExpressRoute(osnova) {
         const app = osnova.express;
