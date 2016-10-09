@@ -1,10 +1,11 @@
 // Created by snov on 30.08.2016.
 
 const path    = require('path');
-const appRoot = global.appRoot;
 
 module.exports = exports = function (root) {
-  root = root || appRoot;
+  if (!root)
+    throw new Error('No absolute root path was provided to core configurator!');
+
   return {
     paths: {
       public: path.resolve(root, './public'),

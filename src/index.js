@@ -109,11 +109,7 @@ var OSNOVA = function(opts) {
   this.__version  = require('../package.json').version;
   this.opts       = opts;
 
-  let root = null;
-  if (opts.core && opts.core.paths && opts.core.paths.root) {
-    root = opts.core.paths.root;
-  }
-  const Config = require('./config/core')(root);
+  const Config = require('./config/core')(opts.core.paths.root);
   this.config = defaults(opts.core, Config);
 };
 

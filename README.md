@@ -71,7 +71,7 @@ Function-initializer. Will be executed in the end of init stage and will have ac
 Function-starter. Will be executed in the end of starting-stage.
 - **opts.core** [object]:
 - **opts.core.paths** [object]:
-- `W!`**opts.core.paths.root** [string]: Absolute project root path. Used in Express, because of it is required only on worker.
+- `!`**opts.core.paths.root** [string]: Absolute project root path. MUST be defined! Used in Express and in low-level configurator.
 - **opts.core.template** [string]: Template engine. Default: 'pug'.
 - **opts.core.target** [object]: Target configuration.
 - **opts.core.target.database** [object]:
@@ -101,7 +101,7 @@ worker.js
             start: (osnova) => { console.log('And I am worker start func!'); }
             core: {
                 paths: {
-                    root: require('path).resolve(__dirname)
+                    root: require('path').resolve(__dirname)
                 }
                 target: {
                     database: { uri: 'my_mongodb_uri' }
