@@ -3,9 +3,9 @@
 The way to use the all power of multicore processors on the server made on node.js.
 
 Include:
-- Mongoose as a database.
 - Express as web server.
 - Passport as authorization system.
+- Mongoose for work with MongoDB.
 - Axon for IPC communication.
 - Socket.IO for client-server communication.
 
@@ -20,7 +20,28 @@ Wow such ready-to-go much time to watch anime!
 
   **--production** - use in most cases. It will not install any Babel stuff. Use this flag if you want to use prebuilt version of OSNOVA.
 
-##Usage
+###Usage
+
+    const OSNOVA = require('osnova');
+    const opts = {/* options object */};
+    const osnova = OSNOVA(opts);
+    osnova.start();
+
+Any component of OSNOVA can be accessed from `init` or `start` functions in options of OSNOVA.
+    
+    const opts = {
+        init: (osnova) => {
+            /* init code goes here */
+        },
+        start: (osnova) => {
+            /* starting code goes here*/
+        }
+    }
+
+
+####Express
+        const app = osnova.express;
+        app.get('/myroute', (req, res) => { res.send('hello') });
 
 
 ##API 
