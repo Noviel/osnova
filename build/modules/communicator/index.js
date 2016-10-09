@@ -10,7 +10,7 @@ function communicator(osnova) {
   osnova.communicator = new _core2.default({
     master: osnova.opts.master,
     port: 4778,
-    ip: osnova.config.target.host.ip,
+    ip: 'localhost',
     io: osnova.io || null
   });
 } // Created by snov on 07.10.2016.

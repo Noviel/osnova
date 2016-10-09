@@ -6,7 +6,7 @@ function communicator(osnova) {
   osnova.communicator = new Communicator({
     master: osnova.opts.master,
     port: 4778,
-    ip: osnova.config.target.host.ip,
+    ip: 'localhost',
     io: osnova.io || null
   });
 }
