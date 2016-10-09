@@ -35,40 +35,53 @@ Wow such ready-to-go much time to watch anime!
       }
     });
 
-Any component of OSNOVA can be accessed from `init` or `start` functions in `opts` of `OSNOVA(opts)`.
+####osnova object
+
+Any component of OSNOVA can be accessed from `osnova` object.
+Functions `init` and `start` from `opts` of `OSNOVA.Server(opts)`
+will be called with `osnova` object as a parameter when the time comes. 
+These functions are a good place to put the functionality of the application.
+There is no way to get this object directly in a random location in code.
     
     const workerOpts = {
         init: (osnova) => {
-            /* init code goes here */
-            myExpressRoute(osnova.express);
+            myExpressRoute(osnova);
+            IPCStuffWorker(osnova);
         },
         start: (osnova) => {
-            /* starting code goes here*/
+            allComponentsAreInitializedLetsRock(osnova);
         }
     }
     const osnovaWorker = OSNOVA.Server(workerOpts);
 
 
-####Express
-    function myExpressRoute(osnova) {    
+#####osnova.express
+    function myExpressRoute(osnova) {
         const app = osnova.express;
         app.get('/myroute', (req, res) => { res.send('hello') });
     }
 
 ##API 
-
-####function OSNOVA.Server(opts)
+###OSNOVA
+OSNOVA module interface.
+####.Server(opts)
+**@in** `opts` - options object
+**@return** `OsnovaServer` - public OSNOVA server interface
 
 Starts OSNOVA server on the master or on a worker.
+This is a default import and available via:
+
+    import OSNOVA from 'osnova'
+    const OsnovaServer = OSNOVA({/* opts */});
     
 **!** - option required to be explicitly defined on both.  **W!** - required for worker.  **M!** - required for master.  
 
 - **opts.master** [true/false]: 
 Default: false. Flag. Is current instance of osnova will be launched in master thread.
-- **opts.init** [function(osnova)]: 
+- **opts.init** [function(osnova object)]: 
 Function-initializer. Will be executed in the end of init stage and will have access to all init-stage systems.
-- **opts.start** [function(osnova)]:
-Function-starter. Will be executed in the end of starting-stage.
+- **opts.start** [function(osnova object)]:
+Function-starter. Will be executed in the end of starting stage.
 - **opts.core** [object]:
 - **opts.core.paths** [object]:
 - `!`**opts.core.paths.root** [string]: Absolute project root path. MUST be defined! Used in Express and in low-level configurator.
@@ -79,9 +92,11 @@ Function-starter. Will be executed in the end of starting-stage.
 - `!`**opts.core.target.database.path** [string]: MongoDB connection URL. Will be used if no `uri` specified.
 - `!`**opts.core.target.database.name** [string]: MongoDB database name. Will be used if no `uri` specified.
 
-####function OSNOVA.launch(opts)
+####.launch(opts)
+**@in** `opts` - options object
+**@return** -
 
-Entry point of multithreaded application.
+Entry point of multithreaded application. It takes config, master and worker functions and launch its in master and workers threads respectively.
 
 - `!`**opts.worker** [function]: Worker function.
 - `!`**opts.master** [function]: Master function.
@@ -90,6 +105,27 @@ Entry point of multithreaded application.
 - **opts.config.host** [object]:
 - **opts.config.host.ip** [string]: Server IP of the application. Default: 'localhost'.
 - **opts.config.host.port** [integer]: Web-server port of the application. Default: '8080'.
+
+###OsnovaServer
+
+####.use(fn, args)
+**@in** `fn` [function]
+**@in** `args` [any]
+**@return** -
+
+Adds custom function that will be executed on `starting` state. 
+First arguments of function is always `osnova` object and should not be included in `args` list. 
+It will be provided automatically by OSNOVA. Because of it - `args` can be undefined|null.
+
+    OsnovaServer.use((osnova) => {
+        console.log('I have access to osnova here', osnova.communicator.ipc);
+    });
+
+####.start()
+**@in** -
+**@return** -
+Starts the server. Any code in flow after this function will never be executed.
+
 
 ###Samples
 

@@ -228,7 +228,9 @@ function OSNOVA_DEFAULT(opts) {
 
   return {
     start: osnova.start.bind(osnova),
-    on: osnova.on.bind(osnova)
+    use: function use(fn, args) {
+      osnova.on('starting', fn, args);
+    }
   };
 }
 
