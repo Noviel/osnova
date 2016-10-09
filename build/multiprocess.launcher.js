@@ -79,6 +79,8 @@ function launch(opts) {
         worker.send('sticky-session:connection', connection);
       }).listen(port);
 
+      console.log('Web server started on ' + ip + ':' + port);
+
       if (production) {
         stopSignals.forEach(function (signal) {
           process.on(signal, function () {

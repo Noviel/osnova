@@ -6,7 +6,7 @@ const IPCMessenger = require('./ipc.messenger');
 class Communicator{
   constructor(opts) {
     this.ipc = new IPCMessenger(opts.port, opts.ip, opts.master);
-    console.log('created ipc. master:', opts.master);
+    console.log(`Created ${opts.master ? 'master' : 'worker'} IPC on ${opts.ip}:${opts.port}`);
     if (!opts.master && opts.io) {
       this.cs = new ClientServerMessenger(opts.io);
     }
