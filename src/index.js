@@ -218,7 +218,7 @@ OSNOVA.prototype.start = function () {
 
 OSNOVA.prototype.on = function(state, action, args) { fn.addAction(this, state, action, args); };
 
-export default function OSNOVA(opts) {
+export default function OSNOVA_DEFAULT(opts) {
   const osnova = new OSNOVA(opts);
 
   return {
@@ -227,4 +227,5 @@ export default function OSNOVA(opts) {
   }
 }
 
+export const Server = OSNOVA_DEFAULT;
 export const launch = require('./multiprocess.launcher');

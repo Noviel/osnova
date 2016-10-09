@@ -3,8 +3,8 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.launch = undefined;
-exports.default = OSNOVA;
+exports.launch = exports.Server = undefined;
+exports.default = OSNOVA_DEFAULT;
 
 var _session = require('./session');
 
@@ -223,7 +223,7 @@ OSNOVA.prototype.on = function (state, action, args) {
   fn.addAction(this, state, action, args);
 };
 
-function OSNOVA(opts) {
+function OSNOVA_DEFAULT(opts) {
   var osnova = new OSNOVA(opts);
 
   return {
@@ -232,4 +232,5 @@ function OSNOVA(opts) {
   };
 }
 
+var Server = exports.Server = OSNOVA_DEFAULT;
 var launch = exports.launch = require('./multiprocess.launcher');

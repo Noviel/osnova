@@ -23,8 +23,8 @@ Wow such ready-to-go much time to watch anime!
 ###Usage
     
     const OSNOVA = require('osnova');
-    const osnovaMaster = OSNOVA(/* masterOpts */);
-    const osnovaWorker = OSNOVA(/* workerOpts */);
+    const osnovaMaster = OSNOVA.Server(/* masterOpts */);
+    const osnovaWorker = OSNOVA.Server(/* workerOpts */);
     
     OSNOVA.launch({
       worker: () => { osnovaWorker.start(); },
@@ -46,7 +46,7 @@ Any component of OSNOVA can be accessed from `init` or `start` functions in `opt
             /* starting code goes here*/
         }
     }
-    const osnovaWorker = OSNOVA(workerOpts);
+    const osnovaWorker = OSNOVA.Server(workerOpts);
 
 
 ####Express
@@ -57,7 +57,7 @@ Any component of OSNOVA can be accessed from `init` or `start` functions in `opt
 
 ##API 
 
-####function OSNOVA(opts)
+####function OSNOVA.Server(opts)
 
 Starts OSNOVA server on the master or on a worker.
     
@@ -79,7 +79,7 @@ Function-starter. Will be executed in the end of starting-stage.
 - `!`**opts.core.target.database.path** [string]: MongoDB connection URL. Will be used if no `uri` specified.
 - `!`**opts.core.target.database.name** [string]: MongoDB database name. Will be used if no `uri` specified.
 
-####function launch(opts)
+####function OSNOVA.launch(opts)
 
 Entry point of multithreaded application.
 
@@ -93,54 +93,3 @@ Entry point of multithreaded application.
 
 ###Basic Application Code
 
-worker.js
-
-    module.exports = {
-        const opts = {
-            init: (osnova) => { console.log('Hello. I am worker init func.'); }
-            start: (osnova) => { console.log('And I am worker start func!'); }
-            core: {
-                paths: {
-                    root: require('path').resolve(__dirname)
-                }
-                target: {
-                    database: { uri: 'my_mongodb_uri' }
-                }
-            }
-        };
-        
-        const OSNOVA = require('osnova');
-        const osnova = OSNOVA(opts);
-        osnova.start();
-    }
-
-master.js
-
-    module.exports = {
-        const opts = {
-            init: (osnova) => { console.log('Hello. I am init master func.'); }
-            start: (osnova) => { console.log('And I am master start func!'); }
-            core: {
-                target: {
-                    database: { uri: 'my_mongodb_uri' }
-                }
-            }
-        };
-        
-        const OSNOVA = require('osnova');
-        const osnova = OSNOVA(opts);
-        osnova.start();
-    }
-
-index.js
-
-    const launch = require('osnova').launch;
-    
-    launch({
-      worker: require('./worker.js'),
-      master: require('./master.js'),
-      config: {
-        threads: 3,
-        host: { ip: 'localhost', port: 3337 }
-      }
-    });
