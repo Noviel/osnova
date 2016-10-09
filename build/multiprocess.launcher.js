@@ -6,6 +6,17 @@ var cluster = require('cluster'),
     stopSignals = ['SIGHUP', 'SIGINT', 'SIGQUIT', 'SIGILL', 'SIGTRAP', 'SIGABRT', 'SIGBUS', 'SIGFPE', 'SIGUSR1', 'SIGSEGV', 'SIGUSR2', 'SIGTERM'],
     production = process.env.NODE_ENV == 'production';
 
+var defaults = require('./lib/core').defaults;
+
+var defaultTarget = {
+  threads: 1,
+
+  host: {
+    port: 8080,
+    ip: 'localhost'
+  }
+};
+
 function launch(opts) {
   var stopping = false;
 
@@ -19,12 +30,10 @@ function launch(opts) {
     }
   });
 
-  var target = opts.config;
-  target.host = target.host || { port: 8080, ip: 'localhost' };
-
-  var port = target.host.port || 8080;
-  var ip = target.host.ip || 'localhost';
-  var threads = target.threads || 1;
+  var target = defaults(opts.config, defaultTarget);
+  var port = target.host.port;
+  var ip = target.host.ip;
+  var threads = target.threads;
 
   var workers = [];
 

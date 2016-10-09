@@ -9,6 +9,17 @@ const cluster = require('cluster'),
 
       production = process.env.NODE_ENV == 'production';
 
+const defaults = require('./lib/core').defaults;
+
+const defaultTarget = {
+  threads: 1,
+
+  host: {
+    port: 8080,
+    ip: 'localhost'
+  }
+};
+
 function launch(opts) {
   let stopping = false;
 
@@ -22,12 +33,10 @@ function launch(opts) {
     }
   });
 
-  const target = opts.config;
-  target.host = target.host || { port: 8080, ip: 'localhost'};
-
-  const port = target.host.port || 8080;
-  const ip = target.host.ip || 'localhost';
-  const threads = target.threads || 1;
+  const target = defaults(opts.config, defaultTarget);
+  const port = target.host.port;
+  const ip = target.host.ip;
+  const threads = target.threads;
 
   let workers = [];
 
