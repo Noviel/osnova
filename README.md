@@ -91,5 +91,7 @@ Entry point of multithreaded application.
 - **opts.config.host.ip** [string]: Server IP of the application. Default: 'localhost'.
 - **opts.config.host.port** [integer]: Web-server port of the application. Default: '8080'.
 
-###Basic Application Code
+###Samples
+
+[Very basic sample application](https://github.com/Noviel/osnova-basic-application)
 
