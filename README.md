@@ -65,9 +65,8 @@ There is no way to get this object directly in a random location in code.
 ###OSNOVA
 OSNOVA module interface.
 ####.Server(opts)
-**@in** `opts` - options object
-**@return** `OsnovaServer` - public OSNOVA server interface
-
+**@in** `opts` - options object  
+**@return** `OsnovaServer` - public OSNOVA server interface  
 Starts OSNOVA server on the master or on a worker.
 This is a default import and available via:
 
@@ -93,8 +92,8 @@ Function-starter. Will be executed in the end of starting stage.
 - `!`**opts.core.target.database.name** [string]: MongoDB database name. Will be used if no `uri` specified.
 
 ####.launch(opts)
-**@in** `opts` - options object
-**@return** -
+**@in** `opts` - options object  
+**@return** -  
 
 Entry point of multithreaded application. It takes config, master and worker functions and launch its in master and workers threads respectively.
 
@@ -109,10 +108,9 @@ Entry point of multithreaded application. It takes config, master and worker fun
 ###OsnovaServer
 
 ####.use(fn, args)
-**@in** `fn` [function]
-**@in** `args` [any]
-**@return** -
-
+**@in** `fn` [function]  
+**@in** `args` [any]  
+**@return** -  
 Adds custom function that will be executed on `starting` state. 
 First arguments of function is always `osnova` object and should not be included in `args` list. 
 It will be provided automatically by OSNOVA. Because of it - `args` can be undefined|null.
@@ -122,8 +120,8 @@ It will be provided automatically by OSNOVA. Because of it - `args` can be undef
     });
 
 ####.start()
-**@in** -
-**@return** -
+**@in** -  
+**@return** -  
 Starts the server. Any code in flow after this function will never be executed.
 
 

@@ -46,5 +46,5 @@
     "patch-release": "npm --no-git-tag-version version patch && npm publish",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "0.3.0"
+  "version": "0.3.1"
 }
