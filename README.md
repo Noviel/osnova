@@ -34,7 +34,7 @@ Wow such ready-to-go much time to watch anime!
         host: { ip: 'localhost', port: 3337 }
       }
     });
-
+    
 ####osnova object
 
 Any component of OSNOVA can be accessed from `osnova` object.
@@ -111,6 +111,8 @@ Entry point of multithreaded application. It takes config, master and worker fun
 - **opts.config.host.port** [integer]: Web-server port of the application. Default: '8080'.
 
 ###OsnovaServer
+
+OsnovaServer is an object returned by `OSNOVA.Server()`
 
 ####.use(fn, args)
 **@in** `fn` [function]  
