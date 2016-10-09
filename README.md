@@ -3,13 +3,13 @@
 The way to use the all power of multicore processors on the server made on node.js.
 
 Include:
-- Express as web server.
-- Passport as authorization system.
+- Express as a web server.
+- Passport as an authorization system.
 - Mongoose for work with MongoDB.
-- Axon for IPC communication.
-- Socket.IO for client-server communication.
+- Axon for IPC.
+- Socket.IO for the client-server communication.
 
-Every worker and maser are isolated processes. Web-server starts on the every worker. So any client requests must be processed in worker code.
+Every worker and the master are isolated processes. A web-server starts on the every worker. So any client requests must be processed in a worker code.
 Master is used to distribute client connections between workers and provides communication of workers with master and between each other. 
 
 Wow such ready-to-go much time to watch anime!
