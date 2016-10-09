@@ -18,7 +18,7 @@ Wow such ready-to-go much time to watch anime!
 
     npm i osnova [--save] [--production]
 
-  **--production** - use in most cases. It will not install any Babel stuff. Use this flag if you want to use prebuilt version of OSNOVA.
+ Use **--production** in the most cases. It will not install any build-related stuff. (Honestly, there is no reason to build it by yourself.)
 
 ###Usage
 
