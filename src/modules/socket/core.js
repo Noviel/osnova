@@ -1,6 +1,5 @@
 // Created by snov on 17.08.2016.
 var IO = require('socket.io');
-const ioRedis = require('socket.io-redis');
 const passportSocketIo = require("passport.socketio");
 
 
@@ -38,8 +37,6 @@ export default class Socket {
           accept(new Error(message));
       }
     }
-
-   // io.adapter(ioRedis({ host: 'localhost', port: 6379 }));
 
     this.io = io;
 
