@@ -17,6 +17,14 @@ function routes(osnova) {
   var passport = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : osnova.userman.passport;
 
 
+  var routes = [];
+  for (var i = 0; i < routes.length; i++) {
+    if (!routes[i] || !routes[i].actions) continue;
+
+    var method = routes[i].method;
+    app[method](routes[i].path, routes[i].actions);
+  }
+
   app.get('/', function (req, res) {
     if (!req.session.views) req.session.views = 1;else req.session.views++;
 

@@ -9,6 +9,8 @@ import routes from './routes';
 
 import { isArray } from '../../lib/core';
 
+const CONST = require('./consants');
+
 const routeActions = {
   newUserRegistered: [],
   userLoggedIn: []
@@ -48,6 +50,20 @@ function pluginsProcessor(plugins) {
       addPlugin(plugins[i])
     }
   }
+}
+
+const defaultOpts = {
+
+};
+
+
+const route = {
+  method: 'post'
+};
+
+function makeRoute(osnova, method, path, middlewares) {
+  const app = osnova.express;
+  app[method](path, middlewares);
 }
 
 export default function userMan(osnova, opts) {

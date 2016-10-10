@@ -158,6 +158,7 @@ OSNOVA.prototype.connect = function () {
 };
 
 OSNOVA.prototype.launch = function () {
+
   fn.addDefaultPreInitActions(this);
   require('./config/init.actions.js')(this);
 

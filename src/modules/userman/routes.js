@@ -11,6 +11,14 @@ export default function routes(
   app = osnova.express,
   passport = osnova.userman.passport) {
 
+  const routes = [];
+  for (let i = 0; i < routes.length; i++) {
+    if (!routes[i] || !routes[i].actions) continue;
+
+    const method = routes[i].method;
+    app[method](routes[i].path, routes[i].actions);
+  }
+
   app.get('/', function(req, res) {
     if (!req.session.views) req.session.views = 1;
     else req.session.views++;

@@ -20,6 +20,8 @@ var LocalStrategy = require('passport-local').Strategy;
 var User = require('./model');
 var userSchema = User.schema;
 
+var CONST = require('./consants');
+
 var routeActions = {
   newUserRegistered: [],
   userLoggedIn: []
@@ -58,6 +60,17 @@ function pluginsProcessor(plugins) {
       addPlugin(plugins[i]);
     }
   }
+}
+
+var defaultOpts = {};
+
+var route = {
+  method: 'post'
+};
+
+function makeRoute(osnova, method, path, middlewares) {
+  var app = osnova.express;
+  app[method](path, middlewares);
 }
 
 function userMan(osnova, opts) {

@@ -89,8 +89,8 @@ Function-starter. Will be executed in the end of starting stage.
 - **opts.core** [object]:
 - **opts.core.paths** [object]:
 - `!`**opts.core.paths.root** [string]: Absolute project root path. MUST be defined! Used in Express and in low-level configurator.
-- `!`**opts.core.paths.public** [string]: Relative path from project root to public web-server folder.
-- `!`**opts.core.paths.views** [string]: Relative path from project root to template-views folder.
+- **opts.core.paths.public** [string]: Relative path from project root to public web-server folder. `Default: './public'`
+- **opts.core.paths.views** [string]: Relative path from project root to template-views folder. `Default './private/views'`
 - **opts.core.template** [string]: Template engine. Default: 'pug'.
 - **opts.core.target** [object]: Target configuration.
 - **opts.core.target.database** [object]:
