@@ -109,21 +109,21 @@ var OSNOVA = function(opts) {
   this.__version  = require('../package.json').version;
   this.opts       = opts;
 
-  const Config = require('./config/core')(opts.core.paths.root);
-  this.config = defaults(opts.core, Config);
+  this.config = defaults(opts.core, require('./config/core'));
 };
 
 OSNOVA.prototype = Object.create(null);
 OSNOVA.prototype.constructor = OSNOVA;
 
-OSNOVA.prototype.prepare = function () {
+OSNOVA.prototype.prepareExpress = function () {
   const app   = express();
   const http  = Http.Server(app);
 
-  app.set('view engine', this.config.template);
-  app.set('views', this.config.paths.views);
+  const root = this.config.paths.root;
 
-  app.use(express.static(this.config.paths.public));
+  app.set('view engine', this.config.template);
+  app.set('views', path.resolve(root, this.config.paths.views));
+  app.use(express.static(path.resolve(root, this.config.paths.public)));
 
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
@@ -170,7 +170,7 @@ OSNOVA.prototype.launch = function () {
 
     console.log('OSNOVA::master started.');
   } else {
-    this.prepare();
+    this.prepareExpress();
 
     fn.executeActions(this, data.actions.preinit);
     fn.executeActions(this, data.actions.init);

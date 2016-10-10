@@ -17,6 +17,8 @@ var Communicator = function () {
     console.log('Created ' + (opts.master ? 'master' : 'worker') + ' IPC on ' + opts.ip + ':' + opts.port);
     if (!opts.master && opts.io) {
       this.cs = new ClientServerMessenger(opts.io);
+    } else {
+      this.cs = null;
     }
   }
 

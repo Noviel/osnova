@@ -2,21 +2,16 @@
 
 const path    = require('path');
 
-module.exports = exports = function (root) {
-  if (!root)
-    throw new Error('No absolute root path was provided to core configurator!');
+module.exports = exports = {
+  paths: {
+    public: './public',
+    views:  './private/views'
+  },
 
-  return {
-    paths: {
-      public: path.resolve(root, './public'),
-      views:  path.resolve(root, './private/views'),
-    },
+  session: {
+    key: 'dqnt.sid',
+    secret: 'W09lWi11$HiN4'
+  },
 
-    session: {
-      key: 'dqnt.sid',
-      secret: 'W09lWi11$HiN4'
-    },
-
-    template: 'pug'
-  };
+  template: 'pug'
 };
