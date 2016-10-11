@@ -36,7 +36,7 @@ Wow such ready-to-go much time to watch anime!
     });
     
     
-####osnova object
+####Accessing the components
 
 Any component of OSNOVA can be accessed from `osnova` object, which is returned by `OSNOVA.Server(opts)`.
 
@@ -55,13 +55,13 @@ will be called with `osnova` object as a parameter when their time comes.
         const osnovaWorker = OSNOVA.Server(workerOpts);
 
 Options (including `start` and `init` functions) are passed to configurator, when `OSNOVA.Server()` is called. 
-But core modules will be created later, after `osnova.start()` will be called. Because of it you **can't** write:
+But core modules will be created later, after `osnova.start()` called. Because of it you **can't** write something like this:
 
     const osnova = OSNOVA.Server(opts);
     const app = osnova.express;
     app.get('/myroute', (req, res) => { res.send('hello') });
 
-`app` will be undefined. All logic should be inside `start`/`init` functions. 
+`app` will be undefined. All logic based on `osnova` components should be called from inside `start`/`init` functions. 
 
  - The other way access to `osnova` components is [OsnovaModule](#osnovamodule).
     
@@ -69,7 +69,7 @@ There is no other way to get any `osnova` component safely.
 
 ##API 
 ###OSNOVA
-OSNOVA module interface.
+`OSNOVA = require('osnova');`
 ####.Server(opts)
 **@in** `opts` - options object  
 **@return** `OsnovaServer` - public OSNOVA server interface  
@@ -77,16 +77,18 @@ Starts OSNOVA server on the master or on a worker.
 This is a default import and available via:
 
     import OSNOVA from 'osnova'
-    const OsnovaServer = OSNOVA({/* opts */});
+    const osnovaServer = OSNOVA({/* opts */});
     
-**!** - option required to be explicitly defined on both.  **W!** - required for worker.  **M!** - required for master.  
+**!** - option required to be explicitly defined on both.  
+**W!** - required for worker.  
+**M!** - required for master.
 
 - **opts.master** [true/false]: 
 Default: false. Flag. Is current instance of osnova will be launched in master thread.
 - **opts.init** [function(osnova object)]: 
-Function-initializer. Will be executed in the end of init stage and will have access to all init-stage systems.
+Function-initializer. Will be called after all components are ready and have full access to them.
 - **opts.start** [function(osnova object)]:
-Function-starter. Will be executed in the end of starting stage.
+Function-starter. Will be called after initialize state.
 - **opts.core** [object]:
 - **opts.core.paths** [object]:
 - `!`**opts.core.paths.root** [string]: Absolute project root path. MUST be defined! Used in Express and in low-level configurator.
@@ -113,26 +115,55 @@ Entry point of multithreaded application. It takes config, master and worker fun
 - **opts.config.host.ip** [string]: Server IP of the application. Default: 'localhost'.
 - **opts.config.host.port** [integer]: Web-server port of the application. Default: '8080'.
 
+####.Module(desc)
+
+ - `!`**@in** `desc` [object]: Module description.  
+ - **@return** `OsnovaModule`.  
+ 
 ###OsnovaServer
 
-OsnovaServer is an object returned by `OSNOVA.Server()`
+Returned by `OSNOVA.Server()` and provides main interface to OSNOVA.
 
-####.use(fn, args)
-**@in** `fn` [function]  
-**@in** `args` [any]  
+####.add(module)
+**@in** `module` [OsnovaModule object]  
 **@return** -  
-Adds custom function that will be executed on `starting` state. 
-First arguments of function is always `osnova` object and should not be included in `args` list. 
-It will be provided automatically by OSNOVA. Because of it - `args` can be undefined|null.
+Adds custom module to OSNOVA. Should be called after `osnova = OSNOVA.Server()` and before `osnova.start()`.
 
-    OsnovaServer.use((osnova) => {
-        console.log('I have access to osnova here', osnova.communicator.ipc);
-    });
+    
+See [OsnovaModule](#osnovamodule) for details.
 
 ####.start()
 **@in** -  
 **@return** -  
 Starts the server. Any code in flow after this function will never be executed.
+
+###OsnovaModule(desc)
+
+Returned by [OSNOVA.Module(opts)](.Module(desc))
+ 
+ - `!`**@in** `desc.name` [object]: Unique module name. 
+ - `!`**@in** `desc.fn` [function(osnova object)]: Module entry point.
+ 
+Module can be created by `new OSNOVA.Module(desc)` or simply by object literal with the required fields.
+ 
+    
+    const myModule = {
+        name: 'myCustomModule',
+        fn: (osnova) => {
+            setTimeout(() => {
+                osnova.moduleReady('myCustomModule');
+            }, 1000);
+        }
+    }
+    osnovaMaster.add(myModule);
+        
+OSNOVA module system is based on the execution queue. Modules are guaranteed to be invoked 
+in the sequence in which were added. Even if they are doing async job inside themselves. 
+This is achieved by function `osnova.moduleReady(module.name)` that **MUST** be called, when module is ready.
+It tells to module system that current module finished the job and the next module can be called. 
+If this function is not called - the system will never 
+know that the module has done his job, and never will start operating next module in the queue.
+
 
 
 ###Samples

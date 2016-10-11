@@ -254,3 +254,4 @@ export default function OSNOVA_DEFAULT(opts) {
 
 export const Server = OSNOVA_DEFAULT;
 export const launch = require('./multiprocess.launcher');
+export const Module = require('./module');
