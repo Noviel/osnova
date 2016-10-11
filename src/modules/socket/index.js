@@ -2,8 +2,10 @@
 
 import Socket from './core';
 
-module.exports = exports = function socketio(osnova, http) {
-  http = http || osnova.http;
+const MODULE_NAME = 'socketio';
+
+function socketio(osnova) {
+  const http = osnova.http;
 
   const io = new Socket(http, {
     cookieParser: osnova.cookieParser,
@@ -19,4 +21,11 @@ module.exports = exports = function socketio(osnova, http) {
   }, false);
 
   osnova.io = io;
+
+  osnova.moduleReady(MODULE_NAME);
+}
+
+module.exports = {
+  name: MODULE_NAME,
+  fn: socketio
 };

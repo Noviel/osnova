@@ -228,7 +228,10 @@ OSNOVA.prototype.start = function () {
     this.add(require('./modules/express'));
     this.add(require('./modules/session'));
     this.add(require('./modules/userman'));
+    this.add(require('./modules/socket'));
   }
+
+  this.add(require('./modules/communicator'));
 
   this.loadModules();
 };

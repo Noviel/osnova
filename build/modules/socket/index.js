@@ -6,8 +6,10 @@ var _core2 = _interopRequireDefault(_core);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-module.exports = exports = function socketio(osnova, http) {
-  http = http || osnova.http;
+var MODULE_NAME = 'socketio'; // Created by snov on 18.09.2016.
+
+function socketio(osnova) {
+  var http = osnova.http;
 
   var io = new _core2.default(http, {
     cookieParser: osnova.cookieParser,
@@ -23,4 +25,11 @@ module.exports = exports = function socketio(osnova, http) {
   }, false);
 
   osnova.io = io;
-}; // Created by snov on 18.09.2016.
+
+  osnova.moduleReady(MODULE_NAME);
+}
+
+module.exports = {
+  name: MODULE_NAME,
+  fn: socketio
+};
