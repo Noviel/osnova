@@ -130,7 +130,7 @@ Returned by `OSNOVA.Server()` and provides main interface to OSNOVA.
 Adds custom module to OSNOVA. Should be called after `osnova = OSNOVA.Server()` and before `osnova.start()`.
 
     
-See [OsnovaModule](#OsnovaModule(desc)) for details.
+See [OsnovaModule](#OsnovaModuledesc) for details.
 
 ####.start()
 **@in** -  
@@ -139,7 +139,7 @@ Starts the server. Any code in flow after this function will never be executed.
 
 ###OsnovaModule(desc)
 
-Returned by [OSNOVA.Module(desc)](#.Module(desc))
+Returned by [OSNOVA.Module(desc)](#Moduledesc)
  
  - `!`**@in** `desc.name` [object]: Unique module name. 
  - `!`**@in** `desc.fn` [function(osnova object)]: Module entry point.
