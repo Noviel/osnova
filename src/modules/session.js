@@ -3,8 +3,18 @@
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 
-export default function (osnova, app, config) {
-  app = app || osnova.express;
+const MODULE_NAME = 'session';
+
+function core(osnova) {
+  const app = osnova.express;
+
+  const config = {
+    mongooseConnection: osnova.connection,
+    secret: osnova.config.session.secret,
+    key: osnova.config.session.key,
+    resave: false,
+    saveUninitialized: false
+  };
 
   if (!config.store) {
     config.store = new MongoStore({ mongooseConnection: config.mongooseConnection });
@@ -12,7 +22,12 @@ export default function (osnova, app, config) {
 
   app.use(session(config));
 
-  console.log(`Session module is loaded`);
-
   osnova.sessionStore = config.store;
+
+  osnova.moduleReady(MODULE_NAME);
 }
+
+module.exports = {
+  name: MODULE_NAME,
+  fn: core
+};

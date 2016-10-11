@@ -1,11 +1,22 @@
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+// Created by snov on 12.07.2016.
 
-exports.default = function (osnova, app, config) {
-  app = app || osnova.express;
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
+
+var MODULE_NAME = 'session';
+
+function core(osnova) {
+  var app = osnova.express;
+
+  var config = {
+    mongooseConnection: osnova.connection,
+    secret: osnova.config.session.secret,
+    key: osnova.config.session.key,
+    resave: false,
+    saveUninitialized: false
+  };
 
   if (!config.store) {
     config.store = new MongoStore({ mongooseConnection: config.mongooseConnection });
@@ -13,12 +24,12 @@ exports.default = function (osnova, app, config) {
 
   app.use(session(config));
 
-  console.log('Session module is loaded');
-
   osnova.sessionStore = config.store;
+
+  osnova.moduleReady(MODULE_NAME);
+}
+
+module.exports = {
+  name: MODULE_NAME,
+  fn: core
 };
-
-// Created by snov on 12.07.2016.
-
-var session = require('express-session');
-var MongoStore = require('connect-mongo')(session);

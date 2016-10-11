@@ -55,7 +55,7 @@ will be called with `osnova` object as a parameter when their time comes.
         }
         const osnovaWorker = OSNOVA.Server(workerOpts);
     
-- `OsnovaServer.use()` takes function that will be executed with `osnova` as first parameter. See [OsnovaServer](#osnovaserver)
+- `OsnovaServer.add()` takes object with function that will be executed with `osnova` as first parameter. See [OsnovaModule](#osnovamodule)
 
 There is no way to get this object directly in any other location in code.
 

@@ -8,7 +8,9 @@ import express from 'express';
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
-export default function prepareExpress(osnova) {
+const MODULE_NAME = 'express';
+
+function fn(osnova) {
   const app   = express();
   const http  = Http.Server(app);
   const config = osnova.config;
@@ -27,4 +29,12 @@ export default function prepareExpress(osnova) {
 
   osnova.express = app;
   osnova.http = http;
+
+  osnova.moduleReady(MODULE_NAME);
+}
+
+module.exports = {
+  name: MODULE_NAME,
+  fn: fn
 };
+

@@ -1,10 +1,5 @@
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = userMan;
-
 var _routes = require('./routes');
 
 var _routes2 = _interopRequireDefault(_routes);
@@ -21,6 +16,7 @@ var User = require('./model');
 var userSchema = User.schema;
 
 var CONST = require('./consants');
+var MODULE_NAME = 'userman';
 
 var routeActions = {
   newUserRegistered: [],
@@ -53,7 +49,7 @@ function addPlugin(plugin) {
 }
 
 function pluginsProcessor(plugins) {
-  console.log('plugins: ', plugins);
+  console.log('userman plugins: ', plugins);
 
   if ((0, _core.isArray)(plugins)) {
     for (var i = 0; i < plugins.length; i++) {
@@ -73,10 +69,13 @@ function makeRoute(osnova, method, path, middlewares) {
   app[method](path, middlewares);
 }
 
-function userMan(osnova, opts) {
+function userMan(osnova) {
   var app = osnova.express;
+  var opts = osnova.opts.userMan;
 
-  pluginsProcessor(opts.plugins);
+  if (opts && opts.plugins) {
+    pluginsProcessor(opts.plugins);
+  }
 
   app.use(passport.initialize());
   app.use(passport.session());
@@ -147,4 +146,11 @@ function userMan(osnova, opts) {
   osnova.execute(_routes2.default, [{
     events: routeActions
   }]);
+
+  osnova.moduleReady(MODULE_NAME);
 }
+
+module.exports = {
+  name: MODULE_NAME,
+  fn: userMan
+};

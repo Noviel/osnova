@@ -1,12 +1,7 @@
 // Created by snov on 29.06.2016.
 
 const  path         = require('path');
-
-const mongoose = require('mongoose');
-const Bluebird = require('bluebird');
-
-mongoose.Promise = Bluebird;
-Bluebird.promisifyAll(require('mongoose'));
+const EventEmitter = require('events').EventEmitter;
 
 import {
   isArray, isFunction,
@@ -42,8 +37,6 @@ const fn =  {
   // args - array of arguments or a single argument or nothing
   // if args is a single argument and it is array - it must be inside []
   addAction(osnova, state, action, args) {
-    console.log(`Adding action ${action} to ${state}`);
-
     if (!isFunction(action)) return;
 
     const dst = data.actions[state];
@@ -82,48 +75,118 @@ var OSNOVA = function(opts) {
   this.opts       = opts;
 
   this.config = defaults(opts.core, require('./config/core'));
+
+  // module loading stuff
+  this.moduleQueue = [];
+  this.syncModuleLoading = true;
+  this.currentModule = null;
+  this.firstModule = null;
+
+  this.ee = new EventEmitter();
+  this.ee.on('MODULE_READY', this.onModuleReady.bind(this));
+  this.ee.on('ALL_MODULES_READY', this.onAllModulesReady.bind(this));
 };
 
 OSNOVA.prototype = Object.create(null);
 OSNOVA.prototype.constructor = OSNOVA;
+
+// add module to the queue
+// if the queue is empty - this is first module and the current
+// if current module is exist - add new module as next to current
+// and set new module is current
+// so we have single linked list of modules in order of they were added
+OSNOVA.prototype.add = function(module) {
+  this.moduleQueue[module.name] = module;
+
+  if (this.currentModule) {
+    this.currentModule.nextModule = module;
+  } else {
+    this.firstModule = module;
+  }
+  this.currentModule = module;
+};
+
+OSNOVA.prototype.onAllModulesReady = function() {
+  console.log(`All modules are ready. Booting...`);
+  this.launch();
+};
+
+function executeModule(osnova, module) {
+  console.log(`Executing module ${module ? module.name : null}`);
+  if (module) {
+    module.fn(osnova);
+  } else {
+    osnova.ee.emit('ALL_MODULES_READY');
+  }
+}
+
+// Triggered by moduleReady()
+OSNOVA.prototype.onModuleReady = function (module) {
+  console.log(`Module ${module.name} is ready`);
+
+  // since current module is ready - move to the next one
+  this.currentModule = module.nextModule;
+  delete this.moduleQueue[module.name];
+
+  // if there is no current module - it means we in the end of the queue
+  // and all modules are ready.
+  if (!this.currentModule) {
+    this.ee.emit('ALL_MODULES_READY');
+  } else {
+    executeModule(this, this.currentModule);
+  }
+};
+
+// Must be called when OSNOVA Module has done all his thing and ready to go.
+// If some module won't call this function - module loading process will stuck on this module forever.
+OSNOVA.prototype.moduleReady = function (name) {
+  if (!this.moduleQueue[name]) {
+    console.log(`moduleReady() called with unknown module [${name}]. Ignoring.`);
+    return;
+  }
+  this.ee.emit('MODULE_READY', this.moduleQueue[name]);
+};
+
+OSNOVA.prototype.loadModules = function () {
+  const modules = this.moduleQueue;
+  if (!this.syncModuleLoading) {
+    for (let i in modules) {
+      modules[i].osnova = this;
+      modules[i].fn(this);
+    }
+  } else {
+    executeModule(this, this.firstModule);
+  }
+};
 
 OSNOVA.prototype.execute = function (action, args) {
   args = fn.prepareActionArgs(this, args);
   action.apply(this, args);
 };
 
-OSNOVA.prototype.connect = function () {
-  let connectString;
-  if (this.config.target.database.uri) {
-    connectString = this.config.target.database.uri;
-  } else {
-    connectString = this.config.target.database.path + this.config.target.database.name;
-  }
-  return this.connection = mongoose.connect(connectString).connection;
-};
-
 OSNOVA.prototype.launch = function () {
 
-  require('./config/preinit.actions')(this);
-  require('./config/init.actions')(this);
-
+  // require('./config/preinit.actions')(this);
+  // require('./config/init.actions')(this);
+  //
   if (isFunction(this.opts.start)) {
-    fn.addAction(this, 'starting', this.opts.start);
+     fn.addAction(this, 'starting', this.opts.start);
   }
 
   // we need to launch init function both on master and workers
-  if (isFunction(this.opts.init)) {
-    fn.addAction(this, 'init', this.opts.init);
-    fn.addAction(this, 'master', this.opts.init);
-  }
+   if (isFunction(this.opts.init)) {
+     fn.addAction(this, 'init', this.opts.init);
+     fn.addAction(this, 'master', this.opts.init);
+   }
 
+  // we don't need to run preinit stage with web-server modules and
+  // the web-server itself on the master
   if (this.opts.master) {
     fn.executeActions(this, data.actions.master);
     fn.executeActions(this, data.actions.starting);
 
     console.log('OSNOVA::master started.');
   } else {
-    fn.executeActions(this, data.actions.preinit);
     fn.executeActions(this, data.actions.init);
     fn.executeActions(this, data.actions.starting);
 
@@ -133,8 +196,7 @@ OSNOVA.prototype.launch = function () {
 };
 
 OSNOVA.prototype.listen = function () {
-  const http = this.http,
-        config = this.config;
+  const http = this.http;
 
   const server = http.listen(0/*config.target.host.port*/, 'localhost'/*config.target.host.ip*/, function () {
     console.log(`OSNOVA::worker pid:${process.pid} started...`);
@@ -158,24 +220,23 @@ OSNOVA.prototype.start = function () {
   console.log('-----------------------------------------------------------');
   console.log('OSNOVA v' + this.__version);
 
-  this.connect()
-    .on('error', console.error.bind(console, 'connection error:'))
-    .on('disconnected', this.connect.bind(this))
-    .once('open', () => {
-      console.log('Connected to MongoDB.');
-      me.launch();
-    });
+  this.add(require('./modules/mongo'));
+
+  if (this.opts.master) {
+
+  } else {
+    this.add(require('./modules/express'));
+    this.add(require('./modules/session'));
+    this.add(require('./modules/userman'));
+  }
+
+  this.loadModules();
 };
 
 OSNOVA.prototype.on = function(state, action, args) { fn.addAction(this, state, action, args); };
 
 export default function OSNOVA_DEFAULT(opts) {
-  const osnova = new OSNOVA(opts);
-
-  return {
-    start: osnova.start.bind(osnova),
-    use: (fn, args) => { osnova.on('starting', fn, args); }
-  }
+  return new OSNOVA(opts);
 }
 
 export const Server = OSNOVA_DEFAULT;

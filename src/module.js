@@ -5,12 +5,14 @@ const Promise = require('bluebird');
 class Module {
   constructor(name, fn) {
     this.name = name;
-    this.fn = fn;
+    this.fn = fn.bind(this);
+    this.ready = false;
+  }
+
+  ready() {
+    osnova.moduleReady(this.name);
   }
 }
 
-module.exports = function load(fn) {
-  return new Promise((res, rej) => {
-
-  });
-};
+module.exports = Module;
+module.exports.default = Module;

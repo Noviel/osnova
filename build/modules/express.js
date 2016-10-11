@@ -1,10 +1,5 @@
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = prepareExpress;
-
 var _express = require('express');
 
 var _express2 = _interopRequireDefault(_express);
@@ -19,7 +14,9 @@ var Http = require('http'),
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-function prepareExpress(osnova) {
+var MODULE_NAME = 'express';
+
+function fn(osnova) {
   var app = (0, _express2.default)();
   var http = Http.Server(app);
   var config = osnova.config;
@@ -38,4 +35,11 @@ function prepareExpress(osnova) {
 
   osnova.express = app;
   osnova.http = http;
+
+  osnova.moduleReady(MODULE_NAME);
+}
+
+module.exports = {
+  name: MODULE_NAME,
+  fn: fn
 };

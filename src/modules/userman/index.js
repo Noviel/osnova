@@ -10,6 +10,7 @@ import routes from './routes';
 import { isArray } from '../../lib/core';
 
 const CONST = require('./consants');
+const MODULE_NAME = 'userman';
 
 const routeActions = {
   newUserRegistered: [],
@@ -43,7 +44,7 @@ function addPlugin (plugin) {
 }
 
 function pluginsProcessor(plugins) {
-  console.log('plugins: ', plugins);
+  console.log('userman plugins: ', plugins);
 
   if (isArray(plugins)) {
     for (let i = 0; i < plugins.length; i++) {
@@ -66,10 +67,13 @@ function makeRoute(osnova, method, path, middlewares) {
   app[method](path, middlewares);
 }
 
-export default function userMan(osnova, opts) {
+function userMan(osnova) {
   const app = osnova.express;
+  const opts = osnova.opts.userMan;
 
-  pluginsProcessor(opts.plugins);
+  if (opts && opts.plugins) {
+    pluginsProcessor(opts.plugins);
+  }
 
   app.use(passport.initialize());
   app.use(passport.session());
@@ -132,4 +136,11 @@ export default function userMan(osnova, opts) {
   osnova.execute(routes, [{
     events: routeActions
   }]);
+
+  osnova.moduleReady(MODULE_NAME);
 }
+
+module.exports = {
+  name: MODULE_NAME,
+  fn: userMan
+};
