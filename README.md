@@ -115,9 +115,10 @@ Entry point of multithreaded application. It takes config, master and worker fun
 - **opts.config.host.ip** [string]: Server IP of the application. Default: 'localhost'.
 - **opts.config.host.port** [integer]: Web-server port of the application. Default: '8080'.
 
-####.Module(desc)
+####.Module(name, fn)
 
- - `!`**@in** `desc` [object]: Module description.  
+ - `!`**@in** `name` [string]: Unique module name. 
+ - `!`**@in** `fn` [function(osnova object)]: Module entry point.
  - **@return** `OsnovaModule`.  
  
 ###OsnovaServer
@@ -130,21 +131,18 @@ Returned by `OSNOVA.Server()` and provides main interface to OSNOVA.
 Adds custom module to OSNOVA. Should be called after `osnova = OSNOVA.Server()` and before `osnova.start()`.
 
     
-See [OsnovaModule](#Osnovamoduledesc) for details.
+See [OsnovaModule](#osnovamoduledesc) for details.
 
 ####.start()
 **@in** -  
 **@return** -  
 Starts the server. Any code in flow after this function will never be executed.
 
-###OsnovaModule(desc)
+###OsnovaModule
 
-Returned by [OSNOVA.Module(desc)](#moduledesc)
+Returned by [OSNOVA.Module(name, fn)](#moduledesc)
  
- - `!`**@in** `desc.name` [object]: Unique module name. 
- - `!`**@in** `desc.fn` [function(osnova object)]: Module entry point.
- 
-Module can be created by `new OSNOVA.Module(desc)` or simply by object literal with the required fields.
+Module can be created by `new OSNOVA.Module()` or simply by object literal with the required fields.
  
     
     const myModule = {
