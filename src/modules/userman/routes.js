@@ -34,10 +34,6 @@ export default function routes(
     res.render('unauth', { action: 'register' });
   });
 
-  // app.get('/auth', expUtils.isNotAuth, (req, res) => {
-  //   res.render('unauth', { action: 'login' });
-  // });
-
   app.get('/isloggedin', function (req, res) {
     if (req.user) {
       res.send(req.user);

@@ -1,10 +1,6 @@
 // Created by snov on 29.06.2016.
 
-const Http     = require('http'),
-  path         = require('path');
-
-import session from './session';
-import express from 'express';
+const  path         = require('path');
 
 const mongoose = require('mongoose');
 const Bluebird = require('bluebird');
@@ -16,9 +12,6 @@ import {
   isArray, isFunction,
   defaults }
   from './lib/core';
-
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
 
 // private data
 const data = {
@@ -32,22 +25,6 @@ const data = {
 
 // private functions
 const fn =  {
-
-  defPreinitActions(osnova) {
-    return [
-      {
-        action: session,
-        args: [osnova.express,
-          {
-            mongooseConnection: osnova.connection,
-            secret: osnova.config.session.secret,
-            key: osnova.config.session.key,
-            resave: false,
-            saveUninitialized: false
-          }]
-      }
-    ]
-  },
 
   // osnova must be the first argument in the final list ALWAYS!!!
   prepareActionArgs(osnova, args) {
@@ -65,6 +42,8 @@ const fn =  {
   // args - array of arguments or a single argument or nothing
   // if args is a single argument and it is array - it must be inside []
   addAction(osnova, state, action, args) {
+    console.log(`Adding action ${action} to ${state}`);
+
     if (!isFunction(action)) return;
 
     const dst = data.actions[state];
@@ -72,17 +51,10 @@ const fn =  {
       data.actions[state] = [];
     }
 
-    const argsF = this.prepareActionArgs(osnova, args);
-
-    data.actions[state].push({action: action, args: argsF});
-  },
-
-
-  addDefaultPreInitActions(osnova) {
-    const acts = this.defPreinitActions(osnova);
-    for (let i = 0; i < acts.length; i++) {
-      this.addAction(osnova, 'preinit', acts[i].action, acts[i].args);
-    }
+    data.actions[state].push({
+      action: action,
+      args: this.prepareActionArgs(osnova, args)
+    });
   },
 
   executeActions(osnova, list) {
@@ -101,7 +73,7 @@ var OSNOVA = function(opts) {
 
   // no socket server on master
   if (!opts.master) {
-    opts.socketio = opts.socketio !== undefined ? opts.socketio : true;
+    opts.socketio = opts.socketio !== false;
   } else {
     opts.socketio = false;
   }
@@ -114,26 +86,6 @@ var OSNOVA = function(opts) {
 
 OSNOVA.prototype = Object.create(null);
 OSNOVA.prototype.constructor = OSNOVA;
-
-OSNOVA.prototype.prepareExpress = function () {
-  const app   = express();
-  const http  = Http.Server(app);
-
-  const root = this.config.paths.root;
-
-  app.set('view engine', this.config.template);
-  app.set('views', path.resolve(root, this.config.paths.views));
-  app.use(express.static(path.resolve(root, this.config.paths.public)));
-
-  app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: false }));
-  app.use(cookieParser());
-
-  this.cookieParser = cookieParser;
-
-  this.express = app;
-  this.http = http;
-};
 
 OSNOVA.prototype.execute = function (action, args) {
   args = fn.prepareActionArgs(this, args);
@@ -152,8 +104,8 @@ OSNOVA.prototype.connect = function () {
 
 OSNOVA.prototype.launch = function () {
 
-  fn.addDefaultPreInitActions(this);
-  require('./config/init.actions.js')(this);
+  require('./config/preinit.actions')(this);
+  require('./config/init.actions')(this);
 
   if (isFunction(this.opts.start)) {
     fn.addAction(this, 'starting', this.opts.start);
@@ -171,8 +123,6 @@ OSNOVA.prototype.launch = function () {
 
     console.log('OSNOVA::master started.');
   } else {
-    this.prepareExpress();
-
     fn.executeActions(this, data.actions.preinit);
     fn.executeActions(this, data.actions.init);
     fn.executeActions(this, data.actions.starting);

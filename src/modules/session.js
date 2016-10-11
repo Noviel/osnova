@@ -12,5 +12,7 @@ export default function (osnova, app, config) {
 
   app.use(session(config));
 
+  console.log(`Session module is loaded`);
+
   osnova.sessionStore = config.store;
 }
