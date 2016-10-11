@@ -78,6 +78,8 @@ var OSNOVA = function(opts) {
 
   // module loading stuff
   this.moduleQueue = [];
+  // if true modules will be loaded one by one.
+  // next module will be activated when MODULE_READY event is fired.
   this.syncModuleLoading = true;
   this.currentModule = null;
   this.firstModule = null;
@@ -85,10 +87,30 @@ var OSNOVA = function(opts) {
   this.ee = new EventEmitter();
   this.ee.on('MODULE_READY', this.onModuleReady.bind(this));
   this.ee.on('ALL_MODULES_READY', this.onAllModulesReady.bind(this));
+
+  // process built-in core modules
+  //
+  this.add(require('./modules/mongo'));
+
+  if (this.opts.master) {
+
+  } else {
+    this.add(require('./modules/express'));
+    this.add(require('./modules/session'));
+    this.add(require('./modules/userman'));
+    this.add(require('./modules/socket'));
+  }
+
+  this.add(require('./modules/communicator'));
 };
 
 OSNOVA.prototype = Object.create(null);
 OSNOVA.prototype.constructor = OSNOVA;
+
+OSNOVA.prototype.execute = function (action, args) {
+  args = fn.prepareActionArgs(this, args);
+  action.apply(this, args);
+};
 
 // add module to the queue
 // if the queue is empty - this is first module and the current
@@ -96,6 +118,10 @@ OSNOVA.prototype.constructor = OSNOVA;
 // and set new module is current
 // so we have single linked list of modules in order of they were added
 OSNOVA.prototype.add = function(module) {
+  if (this.moduleQueue[module.name]) {
+    console.log(`Warning: module with name [${module.name}] already present in modules' queue. Overriding.`);
+  }
+
   this.moduleQueue[module.name] = module;
 
   if (this.currentModule) {
@@ -159,11 +185,6 @@ OSNOVA.prototype.loadModules = function () {
   }
 };
 
-OSNOVA.prototype.execute = function (action, args) {
-  args = fn.prepareActionArgs(this, args);
-  action.apply(this, args);
-};
-
 OSNOVA.prototype.launch = function () {
 
   // require('./config/preinit.actions')(this);
@@ -215,23 +236,12 @@ OSNOVA.prototype.listen = function () {
   });
 };
 
+// Entry point of the server.
+//
 OSNOVA.prototype.start = function () {
   const me = this;
   console.log('-----------------------------------------------------------');
   console.log('OSNOVA v' + this.__version);
-
-  this.add(require('./modules/mongo'));
-
-  if (this.opts.master) {
-
-  } else {
-    this.add(require('./modules/express'));
-    this.add(require('./modules/session'));
-    this.add(require('./modules/userman'));
-    this.add(require('./modules/socket'));
-  }
-
-  this.add(require('./modules/communicator'));
 
   this.loadModules();
 };
