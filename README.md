@@ -35,36 +35,37 @@ Wow such ready-to-go much time to watch anime!
       }
     });
     
+    
 ####osnova object
 
-Any component of OSNOVA can be accessed from `osnova` object.
-
-Access to `osnova` object:
+Any component of OSNOVA can be accessed from `osnova` object, which is returned by `OSNOVA.Server(opts)`.
 
 - Functions `init` and `start` from `opts` of `OSNOVA.Server(opts)` 
 will be called with `osnova` object as a parameter when their time comes.
     
         const workerOpts = {
             init: (osnova) => {
-                myExpressRoute(osnova);
-                IPCStuffWorker(osnova);
+                const app = osnova.express;
+                app.get('/myroute', (req, res) => { res.send('hello') });
             },
             start: (osnova) => {
                 allComponentsAreInitializedLetsRock(osnova);
             }
         }
         const osnovaWorker = OSNOVA.Server(workerOpts);
+
+Options (including `start` and `init` functions) are passed to configurator, when `OSNOVA.Server()` is called. 
+But core modules will be created later, after `osnova.start()` will be called. Because of it you **can't** write:
+
+    const osnova = OSNOVA.Server(opts);
+    const app = osnova.express;
+    app.get('/myroute', (req, res) => { res.send('hello') });
+
+`app` will be undefined. All logic should be inside `start`/`init` functions. 
+
+ - The other way access to `osnova` components is [OsnovaModule](#osnovamodule).
     
-- `OsnovaServer.add()` takes object with function that will be executed with `osnova` as first parameter. See [OsnovaModule](#osnovamodule)
-
-There is no way to get this object directly in any other location in code.
-
-   
-#####osnova.express
-    function myExpressRoute(osnova) {
-        const app = osnova.express;
-        app.get('/myroute', (req, res) => { res.send('hello') });
-    }
+There is no other way to get any `osnova` component safely.
 
 ##API 
 ###OSNOVA
