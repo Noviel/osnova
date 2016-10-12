@@ -141,8 +141,8 @@ OSNOVA.prototype.onAllModulesReady = function () {
 };
 
 function executeModule(osnova, module) {
-  console.log('Executing module ' + (module ? module.name : null));
   if (module) {
+    console.log('Executing module ' + module.name);
     module.fn(osnova);
   } else {
     osnova.ee.emit('ALL_MODULES_READY');
@@ -168,12 +168,10 @@ OSNOVA.prototype.onModuleReady = function (module) {
 
 // Must be called when OSNOVA Module has done all his thing and ready to go.
 // If some module won't call this function - module loading process will stuck on this module forever.
-OSNOVA.prototype.moduleReady = function (name) {
-  if (!this.moduleQueue[name]) {
-    console.log('moduleReady() called with unknown module [' + name + ']. Ignoring.');
-    return;
-  }
-  this.ee.emit('MODULE_READY', this.moduleQueue[name]);
+// Since modules are executed in a sequence - if this function is called inside the module code - this module
+// is currentModule and we don't need to know it's name to say to system what module is ready.
+OSNOVA.prototype.moduleReady = function () {
+  this.ee.emit('MODULE_READY', this.currentModule);
 };
 
 OSNOVA.prototype.loadModules = function () {
@@ -184,6 +182,7 @@ OSNOVA.prototype.loadModules = function () {
       modules[i].fn(this);
     }
   } else {
+    this.currentModule = this.firstModule;
     executeModule(this, this.firstModule);
   }
 };
