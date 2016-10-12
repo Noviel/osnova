@@ -15,7 +15,7 @@ function communicator(osnova) {
     ip: 'localhost',
     io: osnova.io || null
   });
-  osnova.moduleReady(MODULE_NAME);
+  osnova.moduleReady();
 }
 
 module.exports = {

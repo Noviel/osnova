@@ -24,7 +24,7 @@ function core(osnova) {
 
   osnova.sessionStore = config.store;
 
-  osnova.moduleReady(MODULE_NAME);
+  osnova.moduleReady();
 }
 
 module.exports = {

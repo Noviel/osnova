@@ -36,7 +36,7 @@ function fn(osnova) {
   osnova.express = app;
   osnova.http = http;
 
-  osnova.moduleReady(MODULE_NAME);
+  osnova.moduleReady();
 }
 
 module.exports = {

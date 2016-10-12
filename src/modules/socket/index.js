@@ -22,7 +22,7 @@ function socketio(osnova) {
 
   osnova.io = io;
 
-  osnova.moduleReady(MODULE_NAME);
+  osnova.moduleReady();
 }
 
 module.exports = {

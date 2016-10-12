@@ -25,7 +25,7 @@ function mongo(osnova) {
     .on('disconnected', () => { connect(osnova); })
     .once('open', () => {
       console.log('Connected to MongoDB.');
-      osnova.moduleReady(MODULE_NAME);
+      osnova.moduleReady();
     });
 }
 

@@ -137,7 +137,7 @@ function userMan(osnova) {
     events: routeActions
   }]);
 
-  osnova.moduleReady(MODULE_NAME);
+  osnova.moduleReady();
 }
 
 module.exports = {

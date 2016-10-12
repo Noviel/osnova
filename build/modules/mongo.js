@@ -26,7 +26,7 @@ function mongo(osnova) {
     connect(osnova);
   }).once('open', function () {
     console.log('Connected to MongoDB.');
-    osnova.moduleReady(MODULE_NAME);
+    osnova.moduleReady();
   });
 }
 

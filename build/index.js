@@ -158,7 +158,7 @@ OSNOVA.prototype.onModuleReady = function (module) {
   delete this.moduleQueue[module.name];
 
   // if there is no current module - it means we in the end of the queue
-  // and all modules are ready.
+  // and all modules are ready, otherwise - execute next.
   if (!this.currentModule) {
     this.ee.emit('ALL_MODULES_READY');
   } else {
@@ -182,8 +182,9 @@ OSNOVA.prototype.loadModules = function () {
       modules[i].fn(this);
     }
   } else {
+    // We must always execute currentModule in order to moduleReady points on the correct one.
     this.currentModule = this.firstModule;
-    executeModule(this, this.firstModule);
+    executeModule(this, this.currentModule);
   }
 };
 
