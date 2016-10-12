@@ -186,31 +186,19 @@ OSNOVA.prototype.loadModules = function () {
 };
 
 OSNOVA.prototype.launch = function () {
-
-  // require('./config/preinit.actions')(this);
-  // require('./config/init.actions')(this);
-  //
   if (isFunction(this.opts.start)) {
-     fn.addAction(this, 'starting', this.opts.start);
+    fn.addAction(this, 'starting', this.opts.start);
+  }
+  if (isFunction(this.opts.init)) {
+    fn.addAction(this, 'init', this.opts.init);
   }
 
-  // we need to launch init function both on master and workers
-   if (isFunction(this.opts.init)) {
-     fn.addAction(this, 'init', this.opts.init);
-     fn.addAction(this, 'master', this.opts.init);
-   }
+  fn.executeActions(this, data.actions.init);
+  fn.executeActions(this, data.actions.starting);
 
-  // we don't need to run preinit stage with web-server modules and
-  // the web-server itself on the master
   if (this.opts.master) {
-    fn.executeActions(this, data.actions.master);
-    fn.executeActions(this, data.actions.starting);
-
     console.log('OSNOVA::master started.');
   } else {
-    fn.executeActions(this, data.actions.init);
-    fn.executeActions(this, data.actions.starting);
-
     this.listen();
   }
 
