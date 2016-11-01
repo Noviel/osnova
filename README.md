@@ -149,7 +149,7 @@ Module can be created by `new OSNOVA.Module()` or simply by object literal with 
         name: 'myCustomModule',
         fn: (osnova) => {
             setTimeout(() => {
-                osnova.moduleReady('myCustomModule');
+                osnova.moduleReady();
             }, 1000);
         }
     }
@@ -157,8 +157,9 @@ Module can be created by `new OSNOVA.Module()` or simply by object literal with 
         
 OSNOVA module system is based on the execution queue. Modules are guaranteed to be invoked 
 in the sequence in which were added. Even if they are doing async job inside themselves. 
-This is achieved by function `osnova.moduleReady(module.name)` that **MUST** be called, when module is ready.
-It tells to module system that current module finished the job and the next module can be called. 
+This is achieved by function `osnova.moduleReady()` that **MUST** be called, when module is ready.
+It tells to module system that the module (where it is called from) finished the job 
+and the next module can be called. 
 If this function is not called - the system will never 
 know that the module has done his job, and never will start operating next module in the queue.
 

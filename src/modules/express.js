@@ -7,6 +7,7 @@ import express from 'express';
 
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const compression = require('compression');
 
 const MODULE_NAME = 'express';
 
@@ -17,6 +18,7 @@ function fn(osnova) {
 
   const root = config.paths.root;
 
+  app.use(compression());
   app.set('view engine', config.template);
   app.set('views', path.resolve(root, config.paths.views));
   app.use(express.static(path.resolve(root, config.paths.public)));
