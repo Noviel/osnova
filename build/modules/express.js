@@ -13,6 +13,7 @@ var Http = require('http'),
 
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var compression = require('compression');
 
 var MODULE_NAME = 'express';
 
@@ -23,6 +24,7 @@ function fn(osnova) {
 
   var root = config.paths.root;
 
+  app.use(compression());
   app.set('view engine', config.template);
   app.set('views', path.resolve(root, config.paths.views));
   app.use(_express2.default.static(path.resolve(root, config.paths.public)));
