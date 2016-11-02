@@ -14,7 +14,7 @@ const MODULE_NAME = 'express';
 function fn(osnova) {
   const app   = express();
   const http  = Http.Server(app);
-  const config = osnova.config;
+  const config = osnova.opts.core;
 
   const root = config.paths.root;
 

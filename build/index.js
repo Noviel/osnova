@@ -76,10 +76,10 @@ var OSNOVA = function OSNOVA(opts) {
     opts.socketio = false;
   }
 
+  opts.core = (0, _core.defaults)(opts.core, require('./config/core'));
+
   this.__version = require('../package.json').version;
   this.opts = opts;
-
-  this.config = (0, _core.defaults)(opts.core, require('./config/core'));
 
   // module loading stuff
   this.moduleQueue = [];

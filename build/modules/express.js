@@ -20,7 +20,7 @@ var MODULE_NAME = 'express';
 function fn(osnova) {
   var app = (0, _express2.default)();
   var http = Http.Server(app);
-  var config = osnova.config;
+  var config = osnova.opts.core;
 
   var root = config.paths.root;
 

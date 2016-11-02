@@ -9,8 +9,8 @@ function socketio(osnova) {
 
   const io = new Socket(http, {
     cookieParser: osnova.cookieParser,
-    key:          osnova.config.session.key,
-    secret:       osnova.config.session.secret,
+    key:          osnova.opts.core.session.key,
+    secret:       osnova.opts.core.session.secret,
     sessionStore: osnova.sessionStore
   });
 

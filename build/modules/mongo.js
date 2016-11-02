@@ -11,7 +11,7 @@ Bluebird.promisifyAll(require('mongoose'));
 var MODULE_NAME = 'mongo';
 
 function connect(osnova) {
-  var config = osnova.config;
+  var config = osnova.opts.core;
   var connectString = void 0;
   if (config.target.database.uri) {
     connectString = config.target.database.uri;

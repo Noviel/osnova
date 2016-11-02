@@ -10,8 +10,8 @@ function core(osnova) {
 
   const config = {
     mongooseConnection: osnova.connection,
-    secret: osnova.config.session.secret,
-    key: osnova.config.session.key,
+    secret: osnova.opts.core.session.secret,
+    key: osnova.opts.core.session.key,
     resave: false,
     saveUninitialized: false
   };
