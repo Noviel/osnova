@@ -9,7 +9,8 @@ const cluster = require('cluster'),
 
       production = process.env.NODE_ENV == 'production';
 
-const defaults = require('./lib/core').defaults;
+import { core } from 'osnova-lib';
+const defaults = core.defaults;
 
 const defaultTarget = {
   threads: 1,

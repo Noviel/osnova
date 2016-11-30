@@ -4,12 +4,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = routes;
+
+var _osnovaLib = require('osnova-lib');
+
 // Created by snov on 27.08.2016.
 
 var userData = require('./model');
 var User = userData.model;
-
-var expUtils = require('../../lib/express.util');
 
 function routes(osnova) {
   var opts = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
@@ -74,14 +75,14 @@ function routes(osnova) {
 
   app.post('/register', passport.authenticate('local-signup', {
     failureRedirect: '/error/user/registerfailed'
-  }), expUtils.safeMiddlewares(opts.events.newUserRegistered), function (req, res, next) {
+  }), _osnovaLib.express.safeMiddlewares(opts.events.newUserRegistered), function (req, res, next) {
     console.log('user registered');
     res.send({ status: 'success', data: req.user });
   });
 
   app.post('/login', passport.authenticate('local-login', {
     failureRedirect: '/error/user/loggedinfailed'
-  }), expUtils.safeMiddlewares(opts.events.userLoggedIn), function (req, res, next) {
+  }), _osnovaLib.express.safeMiddlewares(opts.events.userLoggedIn), function (req, res, next) {
     res.send({ status: 'success', data: req.user });
   });
 }

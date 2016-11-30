@@ -1,12 +1,14 @@
 'use strict';
 
+var _osnovaLib = require('osnova-lib');
+
 var util = require('util');
 var cluster = require('cluster'),
     net = require('net'),
     stopSignals = ['SIGHUP', 'SIGINT', 'SIGQUIT', 'SIGILL', 'SIGTRAP', 'SIGABRT', 'SIGBUS', 'SIGFPE', 'SIGUSR1', 'SIGSEGV', 'SIGUSR2', 'SIGTERM'],
     production = process.env.NODE_ENV == 'production';
 
-var defaults = require('./lib/core').defaults;
+var defaults = _osnovaLib.core.defaults;
 
 var defaultTarget = {
   threads: 1,

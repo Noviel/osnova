@@ -3,7 +3,7 @@
 var userData = require('./model');
 var User = userData.model;
 
-const expUtils = require('../../lib/express.util');
+import { express as expUtils } from 'osnova-lib';
 
 export default function routes(
   osnova,

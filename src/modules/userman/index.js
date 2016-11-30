@@ -7,7 +7,8 @@ var userSchema = User.schema;
 
 import routes from './routes';
 
-import { isArray } from '../../lib/core';
+import { core } from 'osnova-lib';
+const isArray = core.isArray;
 
 const CONST = require('./consants');
 const MODULE_NAME = 'userman';

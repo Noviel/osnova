@@ -4,7 +4,7 @@ var _routes = require('./routes');
 
 var _routes2 = _interopRequireDefault(_routes);
 
-var _core = require('../../lib/core');
+var _osnovaLib = require('osnova-lib');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -14,6 +14,8 @@ var LocalStrategy = require('passport-local').Strategy;
 
 var User = require('./model');
 var userSchema = User.schema;
+
+var isArray = _osnovaLib.core.isArray;
 
 var CONST = require('./consants');
 var MODULE_NAME = 'userman';
@@ -51,7 +53,7 @@ function addPlugin(plugin) {
 function pluginsProcessor(plugins) {
   console.log('userman plugins: ', plugins);
 
-  if ((0, _core.isArray)(plugins)) {
+  if (isArray(plugins)) {
     for (var i = 0; i < plugins.length; i++) {
       addPlugin(plugins[i]);
     }

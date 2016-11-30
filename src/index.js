@@ -3,10 +3,13 @@
 const  path         = require('path');
 const EventEmitter = require('events').EventEmitter;
 
-import {
-  isArray, isFunction,
-  defaults }
-  from './lib/core';
+import lib from 'osnova-lib';
+
+const {
+  isArray,
+  isFunction,
+  defaults
+} = lib.core;
 
 // private data
 const data = {

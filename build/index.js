@@ -6,14 +6,24 @@ Object.defineProperty(exports, "__esModule", {
 exports.Module = exports.launch = exports.Server = undefined;
 exports.default = OSNOVA_DEFAULT;
 
-var _core = require('./lib/core');
+var _osnovaLib = require('osnova-lib');
+
+var _osnovaLib2 = _interopRequireDefault(_osnovaLib);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Created by snov on 29.06.2016.
 
 var path = require('path');
 var EventEmitter = require('events').EventEmitter;
 
+var _lib$core = _osnovaLib2.default.core,
+    isArray = _lib$core.isArray,
+    isFunction = _lib$core.isFunction,
+    defaults = _lib$core.defaults;
+
 // private data
+
 var data = {
   actions: {
     preinit: [],
@@ -30,7 +40,7 @@ var fn = {
   prepareActionArgs: function prepareActionArgs(osnova, args) {
     if (args === undefined) {
       return [osnova];
-    } else if (!(0, _core.isArray)(args)) {
+    } else if (!isArray(args)) {
       return [osnova, args];
     } else {
       var arr = args.slice(0);
@@ -43,7 +53,7 @@ var fn = {
   // args - array of arguments or a single argument or nothing
   // if args is a single argument and it is array - it must be inside []
   addAction: function addAction(osnova, state, action, args) {
-    if (!(0, _core.isFunction)(action)) return;
+    if (!isFunction(action)) return;
 
     var dst = data.actions[state];
     if (!dst) {
@@ -76,7 +86,7 @@ var OSNOVA = function OSNOVA(opts) {
     opts.socketio = false;
   }
 
-  opts.core = (0, _core.defaults)(opts.core, require('./config/core'));
+  opts.core = defaults(opts.core, require('./config/core'));
 
   this.__version = require('../package.json').version;
   this.opts = opts;
@@ -189,10 +199,10 @@ OSNOVA.prototype.loadModules = function () {
 };
 
 OSNOVA.prototype.launch = function () {
-  if ((0, _core.isFunction)(this.opts.start)) {
+  if (isFunction(this.opts.start)) {
     fn.addAction(this, 'starting', this.opts.start);
   }
-  if ((0, _core.isFunction)(this.opts.init)) {
+  if (isFunction(this.opts.init)) {
     fn.addAction(this, 'init', this.opts.init);
   }
 
