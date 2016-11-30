@@ -93,6 +93,9 @@ var OSNOVA = function OSNOVA(opts) {
 
   // module loading stuff
   this.moduleQueue = [];
+
+  // used to generate names of unnamed modules
+  this.moduleLastIndex = 0;
   // if true modules will be loaded one by one.
   // next module will be activated when MODULE_READY event is fired.
   this.syncModuleLoading = true;
@@ -130,7 +133,16 @@ OSNOVA.prototype.execute = function (action, args) {
 // if current module is exist - add new module as next to current
 // and set new module is current
 // so we have single linked list of modules in order of they were added
-OSNOVA.prototype.add = function (module) {
+OSNOVA.prototype.add = function (module, name) {
+  if (isFunction(module)) {
+    module = {
+      fn: module,
+      name: name || 'm' + this.moduleLastIndex++
+    };
+  } else if (name) {
+    module.name = name;
+  }
+
   if (this.moduleQueue[module.name]) {
     console.log('Warning: module with name [' + module.name + '] already present in modules\' queue. Overriding.');
   }

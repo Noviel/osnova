@@ -125,11 +125,11 @@ Entry point of multithreaded application. It takes config, master and worker fun
 
 Returned by `OSNOVA.Server()` and provides main interface to OSNOVA.
 
-####.add(module)
-**@in** `module` [OsnovaModule object]  
+####.add(module, [name])
+**@in** `module` [OsnovaModule object/function]  
+**@in[opt]** `name` [string]: Optional name of the module.  
 **@return** -  
 Adds custom module to OSNOVA. Should be called after `osnova = OSNOVA.Server()` and before `osnova.start()`.
-
     
 See [OsnovaModule](#osnovamoduledesc) for details.
 
@@ -140,26 +140,23 @@ Starts the server. Any code in flow after this function will never be executed.
 
 ###OsnovaModule
 
-Returned by [OSNOVA.Module(name, fn)](#moduledesc)
+Returned by [OSNOVA.Module(fn, [name])](#moduledesc)
  
-Module can be created by `new OSNOVA.Module()` or simply by object literal with the required fields.
- 
+Module can be created by `new OSNOVA.Module()` or simply by adding the function to osnova.
     
-    const myModule = {
-        name: 'myCustomModule',
-        fn: (osnova) => {
-            setTimeout(() => {
-                osnova.moduleReady();
-            }, 1000);
-        }
+    const myModule = (osnova) => {
+        setTimeout(() => {
+            osnova.moduleReady();
+        }, 1000);
     }
-    osnovaMaster.add(myModule);
+    osnovaMaster.add(myModule, 'MyModule');
         
 OSNOVA module system is based on the execution queue. Modules are guaranteed to be invoked 
 in the sequence in which were added. Even if they are doing async job inside themselves. 
 This is achieved by function `osnova.moduleReady()` that **MUST** be called, when module is ready.
 It tells to module system that the module (where it is called from) finished the job 
-and the next module can be called. 
+and the next module can be called. So you can safely add modules, that doing some async work.
+They are guaranteed to do all they need before next module will start. 
 If this function is not called - the system will never 
 know that the module has done his job, and never will start operating next module in the queue.
 
