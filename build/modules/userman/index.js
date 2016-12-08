@@ -18,7 +18,6 @@ var userSchema = User.schema;
 var isArray = _osnovaLib.core.isArray;
 
 var CONST = require('./consants');
-var MODULE_NAME = 'userman';
 
 var routeActions = {
   newUserRegistered: [],
@@ -152,7 +151,4 @@ function userMan(osnova) {
   osnova.moduleReady();
 }
 
-module.exports = {
-  name: MODULE_NAME,
-  fn: userMan
-};
+module.exports = userMan;

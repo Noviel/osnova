@@ -6,8 +6,6 @@ var _core2 = _interopRequireDefault(_core);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var MODULE_NAME = 'communicator'; // Created by snov on 07.10.2016.
-
 function communicator(osnova) {
   osnova.communicator = new _core2.default({
     master: osnova.opts.master,
@@ -16,9 +14,6 @@ function communicator(osnova) {
     io: osnova.io || null
   });
   osnova.moduleReady();
-}
+} // Created by snov on 07.10.2016.
 
-module.exports = {
-  name: MODULE_NAME,
-  fn: communicator
-};
+module.exports = communicator;

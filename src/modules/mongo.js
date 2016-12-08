@@ -6,8 +6,6 @@ const Bluebird = require('bluebird');
 mongoose.Promise = Bluebird;
 Bluebird.promisifyAll(require('mongoose'));
 
-const MODULE_NAME = 'mongo';
-
 function connect(osnova) {
   const config = osnova.opts.core;
   let connectString;
@@ -29,7 +27,4 @@ function mongo(osnova) {
     });
 }
 
-module.exports = {
-  name: MODULE_NAME,
-  fn: mongo
-};
+module.exports = mongo;

@@ -2,8 +2,6 @@
 
 import Socket from './core';
 
-const MODULE_NAME = 'socketio';
-
 function socketio(osnova) {
   const http = osnova.http;
 
@@ -25,7 +23,4 @@ function socketio(osnova) {
   osnova.moduleReady();
 }
 
-module.exports = {
-  name: MODULE_NAME,
-  fn: socketio
-};
+module.exports = socketio;

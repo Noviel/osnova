@@ -2,8 +2,6 @@
 
 import Communicator from './core';
 
-const MODULE_NAME = 'communicator';
-
 function communicator(osnova) {
   osnova.communicator = new Communicator({
     master: osnova.opts.master,
@@ -14,7 +12,4 @@ function communicator(osnova) {
   osnova.moduleReady();
 }
 
-module.exports = {
-  name: MODULE_NAME,
-  fn: communicator
-};
+module.exports = communicator;

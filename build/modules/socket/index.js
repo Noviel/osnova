@@ -6,8 +6,6 @@ var _core2 = _interopRequireDefault(_core);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var MODULE_NAME = 'socketio'; // Created by snov on 18.09.2016.
-
 function socketio(osnova) {
   var http = osnova.http;
 
@@ -27,9 +25,6 @@ function socketio(osnova) {
   osnova.io = io;
 
   osnova.moduleReady();
-}
+} // Created by snov on 18.09.2016.
 
-module.exports = {
-  name: MODULE_NAME,
-  fn: socketio
-};
+module.exports = socketio;

@@ -1,9 +1,9 @@
 // Created by snov on 14.07.2016.
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 
-var User = require('./model');
-var userSchema = User.schema;
+const User = require('./model');
+const userSchema = User.schema;
 
 import routes from './routes';
 
@@ -11,7 +11,6 @@ import { core } from 'osnova-lib';
 const isArray = core.isArray;
 
 const CONST = require('./consants');
-const MODULE_NAME = 'userman';
 
 const routeActions = {
   newUserRegistered: [],
@@ -141,7 +140,4 @@ function userMan(osnova) {
   osnova.moduleReady();
 }
 
-module.exports = {
-  name: MODULE_NAME,
-  fn: userMan
-};
+module.exports = userMan;

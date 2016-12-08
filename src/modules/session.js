@@ -3,9 +3,7 @@
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 
-const MODULE_NAME = 'session';
-
-function core(osnova) {
+function fn(osnova) {
   const app = osnova.express;
 
   const config = {
@@ -27,7 +25,4 @@ function core(osnova) {
   osnova.moduleReady();
 }
 
-module.exports = {
-  name: MODULE_NAME,
-  fn: core
-};
+module.exports = fn;

@@ -108,13 +108,13 @@ var OSNOVA = function OSNOVA(opts) {
 
   // process built-in core modules
   //
-  this.add(require('./modules/mongo'));
+  this.add(require('./modules/mongo'), 'mongo');
 
   if (this.opts.master) {} else {
-    this.add(require('./modules/express'));
-    this.add(require('./modules/session'));
-    this.add(require('./modules/userman'));
-    this.add(require('./modules/socket'));
+    this.add(require('./modules/express'), 'express');
+    this.add(require('./modules/session'), 'session');
+    this.add(require('./modules/userman'), 'userman');
+    this.add(require('./modules/socket'), 'socket');
   }
 
   this.add(require('./modules/communicator'));

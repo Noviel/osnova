@@ -15,8 +15,6 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var compression = require('compression');
 
-var MODULE_NAME = 'express';
-
 function fn(osnova) {
   var app = (0, _express2.default)();
   var http = Http.Server(app);
@@ -41,7 +39,4 @@ function fn(osnova) {
   osnova.moduleReady();
 }
 
-module.exports = {
-  name: MODULE_NAME,
-  fn: fn
-};
+module.exports = fn;
