@@ -20,6 +20,7 @@ var EventEmitter = require('events').EventEmitter;
 var _lib$core = _osnovaLib2.default.core,
     isArray = _lib$core.isArray,
     isFunction = _lib$core.isFunction,
+    isObject = _lib$core.isObject,
     defaults = _lib$core.defaults;
 
 // private data
@@ -118,6 +119,14 @@ var OSNOVA = function OSNOVA(opts) {
   }
 
   this.add(require('./modules/communicator'));
+
+  var modules = opts.modules;
+
+  if (isArray(modules)) {
+    for (var i = 0; i < modules.length; i++) {
+      this.add(modules[i]);
+    }
+  }
 };
 
 OSNOVA.prototype = Object.create(null);
@@ -139,8 +148,13 @@ OSNOVA.prototype.add = function (module, name) {
       fn: module,
       name: name || 'm' + this.moduleLastIndex++
     };
-  } else if (name) {
-    module.name = name;
+  } else if (isObject(module) && isFunction(module.fn)) {
+    if (!module.name) {
+      module.name = name || 'm' + this.moduleLastIndex;
+    }
+  } else {
+    console.log('Error: wrong module format ' + module);
+    return;
   }
 
   if (this.moduleQueue[module.name]) {

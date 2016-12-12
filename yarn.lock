@@ -1878,9 +1878,9 @@ os-tmpdir@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/os-tmpdir/-/os-tmpdir-1.0.2.tgz#bbe67406c79aa85c5cfec766fe5734555dfa1274"
 
-osnova-lib@1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/osnova-lib/-/osnova-lib-1.0.2.tgz#9a13a9f4455b6a8f1a5a45c998bf0afc02bf543b"
+osnova-lib@1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/osnova-lib/-/osnova-lib-1.0.3.tgz#5905980440c0cfa5a4e254b0b7aaf4535a0e0935"
 
 output-file-sync@^1.1.0:
   version "1.1.2"

@@ -8,6 +8,7 @@ import lib from 'osnova-lib';
 const {
   isArray,
   isFunction,
+  isObject,
   defaults
 } = lib.core;
 
@@ -108,6 +109,14 @@ const OSNOVA = function(opts) {
   }
 
   this.add(require('./modules/communicator'));
+
+  const modules = opts.modules;
+
+  if (isArray(modules)) {
+    for (let i = 0; i < modules.length; i++) {
+      this.add(modules[i]);
+    }
+  }
 };
 
 OSNOVA.prototype = Object.create(null);
@@ -129,8 +138,13 @@ OSNOVA.prototype.add = function(module, name) {
       fn: module,
       name: name || 'm'+this.moduleLastIndex++
     }
-  } else if (name) {
-    module.name = name;
+  } else if (isObject(module) && isFunction(module.fn)) {
+    if (!module.name) {
+      module.name = name || 'm' + this.moduleLastIndex;
+    }
+  } else {
+    console.log(`Error: wrong module format ${module}`);
+    return;
   }
 
   if (this.moduleQueue[module.name]) {
