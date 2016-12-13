@@ -114,7 +114,6 @@ var OSNOVA = function OSNOVA(opts) {
   if (this.opts.master) {} else {
     this.add(require('./modules/express'), 'express');
     this.add(require('./modules/session'), 'session');
-    this.add(require('./modules/userman'), 'userman');
     this.add(require('./modules/socket'), 'socket');
   }
 

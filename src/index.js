@@ -104,7 +104,6 @@ const OSNOVA = function(opts) {
   } else {
     this.add(require('./modules/express'), 'express');
     this.add(require('./modules/session'), 'session');
-    this.add(require('./modules/userman'), 'userman');
     this.add(require('./modules/socket'), 'socket');
   }
 
