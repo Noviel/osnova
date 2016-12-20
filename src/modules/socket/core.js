@@ -1,7 +1,6 @@
 // Created by snov on 17.08.2016.
 var IO = require('socket.io');
-const passportSocketIo = require("passport.socketio");
-
+const passportSocketIo = require('passport.socketio');
 
 export default class Socket {
   constructor(server, authOpts) {

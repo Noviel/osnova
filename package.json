@@ -1,8 +1,5 @@
 {
-  "author": {
-    "name": "Sasha snov Noviel",
-    "email": "snov.contact@gmail.com"
-  },
+  "author": "Sasha snov Noviel",
   "dependencies": {
     "axon": "^2.0.2",
     "bcryptjs": "^2.3.0",
@@ -16,8 +13,6 @@
     "mongoose": "^4.5.1",
     "object-assign": "^4.1.0",
     "osnova-lib": "1.0.3",
-    "passport": "^0.3.2",
-    "passport-local": "^1.0.0",
     "passport.socketio": "^3.6.2",
     "pug": "^2.0.0-beta3",
     "socket.io": "^1.4.8"
@@ -48,5 +43,5 @@
     "patch-release": "npm --no-git-tag-version version patch && npm publish",
     "test": "npm run build && node test/index.js"
   },
-  "version": "0.9.0"
+  "version": "0.10.1"
 }
