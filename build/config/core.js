@@ -15,5 +15,16 @@ module.exports = exports = {
     secret: 'W09lWi11$HiN4'
   },
 
-  template: 'pug'
+  use: {
+    express: true,
+    socketio: true,
+    session: true,
+    mongo: true
+  },
+
+  template: 'pug',
+
+  socketio: true,
+  express: true,
+  mongo: true
 };

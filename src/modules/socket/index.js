@@ -2,25 +2,30 @@
 
 import Socket from './core';
 
-function socketio(osnova) {
-  const http = osnova.http;
+export default function socket (opts) {
+  const authOpts = opts.auth ?
+    {
+      cookieParser: osnova.cookieParser,
+      key: osnova.opts.core.session.key,
+      secret: osnova.opts.core.session.secret,
+      sessionStore: osnova.sessionStore
+    } : null;
 
-  const io = new Socket(http, {
-    cookieParser: osnova.cookieParser,
-    key:          osnova.opts.core.session.key,
-    secret:       osnova.opts.core.session.secret,
-    sessionStore: osnova.sessionStore
-  });
+  return function socketio(osnova) {
+    const http = osnova.http;
 
-  io.on = io.socketEvent;
+    const io = new Socket(http, authOpts);
 
-  io.socketEvent('disconnect', function () {
-    console.log('socket disconnected');
-  }, false);
+    io.on = io.socketEvent;
 
-  osnova.io = io;
+    io.socketEvent('disconnect', function () {
+      console.log('socket disconnected');
+    }, false);
 
-  osnova.moduleReady();
+    osnova.io = io;
+
+    osnova.moduleReady();
+  };
 }
 
-module.exports = socketio;
+module.exports = socket;

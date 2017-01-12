@@ -161,7 +161,6 @@ If this function is not called - the system will never
 know that the module has done his job, and never will start operating next module in the queue.
 
 
-
 ###Samples
 
 [Very basic sample application](https://github.com/Noviel/osnova-basic-application)

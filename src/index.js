@@ -1,6 +1,6 @@
 // Created by snov on 29.06.2016.
 
-const  path         = require('path');
+const path = require('path');
 const EventEmitter = require('events').EventEmitter;
 
 import lib from 'osnova-lib';
@@ -22,58 +22,9 @@ const data = {
   }
 };
 
-// private functions
-const fn =  {
-
-  // osnova must be the first argument in the final list ALWAYS!!!
-  prepareActionArgs(osnova, args) {
-    if (args === undefined) {
-      return [osnova];
-    } else if (!isArray(args)) {
-      return [osnova, args];
-    } else {
-      const arr = args.slice(0);
-      arr.splice(0, 0, osnova);
-      return arr;
-    }
-  },
-
-  // args - array of arguments or a single argument or nothing
-  // if args is a single argument and it is array - it must be inside []
-  addAction(osnova, state, action, args) {
-    if (!isFunction(action)) return;
-
-    const dst = data.actions[state];
-    if (!dst) {
-      data.actions[state] = [];
-    }
-
-    data.actions[state].push({
-      action: action,
-      args: this.prepareActionArgs(osnova, args)
-    });
-  },
-
-  executeActions(osnova, list) {
-    const count = list.length;
-    let curr;
-    for (let i = 0; i < count; i++) {
-      curr = list[i];
-      curr.action.apply(osnova, curr.args);
-    }
-  }
-};
-
 const OSNOVA = function(opts) {
   opts = opts || {};
   opts.master = opts.master || false;
-
-  // no socket server on master
-  if (!opts.master) {
-    opts.socketio = opts.socketio !== false;
-  } else {
-    opts.socketio = false;
-  }
 
   opts.core = defaults(opts.core, require('./config/core'));
 
@@ -97,14 +48,26 @@ const OSNOVA = function(opts) {
 
   // process built-in core modules
   //
-  this.add(require('./modules/mongo'), 'mongo');
+
+  if (this.opts.core.mongo) {
+    this.add(require('./modules/mongo'), 'mongo');
+  }
 
   if (this.opts.master) {
 
   } else {
-    this.add(require('./modules/express'), 'express');
-    this.add(require('./modules/session'), 'session');
-    this.add(require('./modules/socket'), 'socket');
+
+    if (this.opts.core.express) {
+      this.add(require('./modules/express'), 'express');
+    }
+
+    if (this.opts.core.session) {
+      this.add(require('./modules/session'), 'session');
+    }
+
+    if (this.opts.core.socketio) {
+      this.add(require('./modules/socket')({ auth: this.opts.core.auth }), 'socket');
+    }
   }
 
   this.add(require('./modules/communicator'));
@@ -121,10 +84,7 @@ const OSNOVA = function(opts) {
 OSNOVA.prototype = Object.create(null);
 OSNOVA.prototype.constructor = OSNOVA;
 
-OSNOVA.prototype.execute = function (action, args) {
-  args = fn.prepareActionArgs(this, args);
-  action.apply(this, args);
-};
+
 
 // add module to the queue
 // if the queue is empty - this is first module and the current
@@ -176,13 +136,15 @@ function executeModule(osnova, module) {
 
 // Triggered by moduleReady()
 OSNOVA.prototype.onModuleReady = function (module) {
+  if (!module) return;
+
   console.log(`Module ${module.name} is ready`);
 
   // since current module is ready - move to the next one
   this.currentModule = module.nextModule;
   delete this.moduleQueue[module.name];
 
-  // if there is no current module - it means we in the end of the queue
+  // if there is no current module - it means we are in the end of the queue
   // and all modules are ready, otherwise - execute next.
   if (!this.currentModule) {
     this.ee.emit('ALL_MODULES_READY');
@@ -214,28 +176,17 @@ OSNOVA.prototype.loadModules = function () {
 };
 
 OSNOVA.prototype.launch = function () {
-  if (isFunction(this.opts.start)) {
-    fn.addAction(this, 'starting', this.opts.start);
-  }
-  if (isFunction(this.opts.init)) {
-    fn.addAction(this, 'init', this.opts.init);
-  }
-
-  fn.executeActions(this, data.actions.init);
-  fn.executeActions(this, data.actions.starting);
-
   if (this.opts.master) {
     console.log('OSNOVA::master started.');
   } else {
     this.listen();
   }
-
 };
 
 OSNOVA.prototype.listen = function () {
   const http = this.http;
 
-  const server = http.listen(0/*config.target.host.port*/, 'localhost'/*config.target.host.ip*/, function () {
+  const server = http.listen(0/*config.target.host.port*/, 'localhost'/*config.target.host.ip*/, () => {
     console.log(`OSNOVA::worker pid:${process.pid} started...`);
   });
 
@@ -255,9 +206,12 @@ OSNOVA.prototype.listen = function () {
 // Entry point of the server.
 //
 OSNOVA.prototype.start = function () {
-  const me = this;
   console.log('-----------------------------------------------------------');
   console.log('OSNOVA v' + this.__version);
+
+  if (isFunction(this.opts.start)) {
+    this.add(this.opts.start);
+  }
 
   this.loadModules();
 };

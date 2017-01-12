@@ -10,7 +10,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 // Created by snov on 17.08.2016.
 var IO = require('socket.io');
-var passportSocketIo = require('passport.socketio');
 
 var Socket = function () {
   function Socket(server, authOpts) {
@@ -35,6 +34,8 @@ var Socket = function () {
 
         if (error) accept(new Error(message));
       };
+
+      var passportSocketIo = require('passport.socketio');
 
       io.use(passportSocketIo.authorize({
         cookieParser: authOpts.cookieParser,

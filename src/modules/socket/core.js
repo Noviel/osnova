@@ -1,6 +1,5 @@
 // Created by snov on 17.08.2016.
-var IO = require('socket.io');
-const passportSocketIo = require('passport.socketio');
+const IO = require('socket.io');
 
 export default class Socket {
   constructor(server, authOpts) {
@@ -10,9 +9,11 @@ export default class Socket {
       pure: {}
     };
 
-    var io = IO(server);
+    const io = IO(server);
 
     if (authOpts) {
+      const passportSocketIo = require('passport.socketio');
+
       io.use(passportSocketIo.authorize({
         cookieParser: authOpts.cookieParser,
         key: authOpts.key,
