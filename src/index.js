@@ -210,7 +210,10 @@ OSNOVA.prototype.start = function () {
   console.log('OSNOVA v' + this.__version);
 
   if (isFunction(this.opts.start)) {
-    this.add(this.opts.start);
+    this.add((osnova) => {
+      this.opts.start(osnova);
+      this.moduleReady();
+    });
   }
 
   this.loadModules();

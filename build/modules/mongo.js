@@ -8,6 +8,8 @@ var Bluebird = require('bluebird');
 mongoose.Promise = Bluebird;
 Bluebird.promisifyAll(require('mongoose'));
 
+var isFirstTimeConnected = true;
+
 function connect(osnova) {
   var config = osnova.opts.core;
   var connectString = void 0;
@@ -24,7 +26,10 @@ function mongo(osnova) {
     connect(osnova);
   }).once('open', function () {
     console.log('Connected to MongoDB.');
-    osnova.moduleReady();
+    if (isFirstTimeConnected) {
+      osnova.moduleReady();
+      isFirstTimeConnected = false;
+    }
   });
 }
 

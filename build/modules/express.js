@@ -1,31 +1,26 @@
 'use strict';
 
-var _express = require('express');
-
-var _express2 = _interopRequireDefault(_express);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 // Created by snov on 11.10.2016.
 
 var Http = require('http'),
     path = require('path');
 
+var express = require('express');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var compression = require('compression');
 
-function fn(osnova) {
-  var app = (0, _express2.default)();
-  var http = Http.Server(app);
-  var config = osnova.opts.core;
+module.exports = function (osnova) {
+  var config = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : osnova.opts.core;
 
+  var app = express();
+  var http = Http.Server(app);
   var root = config.paths.root;
 
   app.use(compression());
   app.set('view engine', config.template);
   app.set('views', path.resolve(root, config.paths.views));
-  app.use(_express2.default.static(path.resolve(root, config.paths.public)));
+  app.use(express.static(path.resolve(root, config.paths.public)));
 
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
@@ -37,6 +32,4 @@ function fn(osnova) {
   osnova.http = http;
 
   osnova.moduleReady();
-}
-
-module.exports = fn;
+};

@@ -3,17 +3,14 @@
 const Http = require('http'),
       path = require('path');
 
-import express from 'express';
-
+const express = require('express');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const compression = require('compression');
 
-function fn(osnova) {
+module.exports = (osnova, config = osnova.opts.core) => {
   const app   = express();
   const http  = Http.Server(app);
-  const config = osnova.opts.core;
-
   const root = config.paths.root;
 
   app.use(compression());
@@ -31,7 +28,4 @@ function fn(osnova) {
   osnova.http = http;
 
   osnova.moduleReady();
-}
-
-module.exports = fn;
-
+};
