@@ -46,7 +46,7 @@ function launch(opts) {
 
     console.log(`Starting ${workerCount} workers...`);
 
-    var spawn = function (i) {
+    const spawn = function (i) {
       workers[i] = cluster.fork();
       workers[i].on('exit', function (code, signal) {
         console.log('respawning worker', i);
@@ -58,9 +58,9 @@ function launch(opts) {
       spawn(i);
     }
 
-    var workerIndex = function (ip, len) {
-      var s = '';
-      for (var i = 0, _len = ip.length; i < _len; i++) {
+    const workerIndex = function (ip, len) {
+      let s = '';
+      for (let i = 0, _len = ip.length; i < _len; i++) {
         if (!isNaN(ip[i])) {
           s += ip[i];
         }

@@ -40,32 +40,28 @@ function launch(opts) {
   var workers = [];
 
   if (cluster.isMaster) {
-    var _spawn;
-
-    var workerIndex;
-
     (function () {
       var workerCount = threads;
 
       console.log('Starting ' + workerCount + ' workers...');
 
-      _spawn = function spawn(i) {
+      var spawn = function spawn(i) {
         workers[i] = cluster.fork();
         workers[i].on('exit', function (code, signal) {
           console.log('respawning worker', i);
-          _spawn(i);
+          spawn(i);
         });
       };
 
       for (var i = 0; i < workerCount; i++) {
-        _spawn(i);
+        spawn(i);
       }
 
-      workerIndex = function workerIndex(ip, len) {
+      var workerIndex = function workerIndex(ip, len) {
         var s = '';
-        for (var i = 0, _len = ip.length; i < _len; i++) {
-          if (!isNaN(ip[i])) {
-            s += ip[i];
+        for (var _i = 0, _len = ip.length; _i < _len; _i++) {
+          if (!isNaN(ip[_i])) {
+            s += ip[_i];
           }
         }
 

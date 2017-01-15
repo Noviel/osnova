@@ -23,19 +23,10 @@ var _lib$core = _osnovaLib2.default.core,
     isObject = _lib$core.isObject,
     defaults = _lib$core.defaults;
 
-// private data
 
-var data = {
-  actions: {
-    preinit: [],
-    init: [],
-    starting: [],
-    master: []
-  }
-};
+var OSNOVA = function OSNOVA() {
+  var opts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-var OSNOVA = function OSNOVA(opts) {
-  opts = opts || {};
   opts.master = opts.master || false;
 
   opts.core = defaults(opts.core, require('./config/core'));

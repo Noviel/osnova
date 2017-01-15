@@ -44,10 +44,6 @@ Any component of OSNOVA can be accessed from `osnova` object, which is returned 
 will be called with `osnova` object as a parameter when their time comes.
     
         const workerOpts = {
-            init: (osnova) => {
-                const app = osnova.express;
-                app.get('/myroute', (req, res) => { res.send('hello') });
-            },
             start: (osnova) => {
                 allComponentsAreInitializedLetsRock(osnova);
             }
@@ -85,8 +81,6 @@ This is a default import and available via:
 
 - **opts.master** [true/false]: 
 Default: false. Flag. Is current instance of osnova will be launched in master thread.
-- **opts.init** [function(osnova object)]: 
-Function-initializer. Will be called after all components are ready and have full access to them.
 - **opts.start** [function(osnova object)]:
 Function-starter. Will be called after initialize state.
 - **opts.core** [object]:

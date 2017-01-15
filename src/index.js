@@ -12,18 +12,7 @@ const {
   defaults
 } = lib.core;
 
-// private data
-const data = {
-  actions: {
-    preinit: [],
-    init: [],
-    starting: [],
-    master: []
-  }
-};
-
-const OSNOVA = function(opts) {
-  opts = opts || {};
+const OSNOVA = function(opts = {}) {
   opts.master = opts.master || false;
 
   opts.core = defaults(opts.core, require('./config/core'));
