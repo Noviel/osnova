@@ -6,7 +6,6 @@ class Module {
   constructor(name, fn) {
     this.name = name;
     this.fn = fn.bind(this);
-    this.ready = false;
   }
 
   ready() {

@@ -194,13 +194,13 @@ OSNOVA.prototype.listen = function () {
 
 // Entry point of the server.
 //
-OSNOVA.prototype.start = function () {
+OSNOVA.prototype.start = function (callback) {
   console.log('-----------------------------------------------------------');
   console.log('OSNOVA v' + this.__version);
 
-  if (isFunction(this.opts.start)) {
+  if (isFunction(callback)) {
     this.add((osnova) => {
-      this.opts.start(osnova);
+      callback(osnova);
       this.moduleReady();
     });
   }

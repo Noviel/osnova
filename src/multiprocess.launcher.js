@@ -7,7 +7,7 @@ const cluster = require('cluster'),
         'SIGBUS', 'SIGFPE', 'SIGUSR1', 'SIGSEGV', 'SIGUSR2', 'SIGTERM'
       ],
 
-      production = process.env.NODE_ENV == 'production';
+      production = process.env.NODE_ENV === 'production';
 
 import { core } from 'osnova-lib';
 const defaults = core.defaults;

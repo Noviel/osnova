@@ -6,7 +6,7 @@ var util = require('util');
 var cluster = require('cluster'),
     net = require('net'),
     stopSignals = ['SIGHUP', 'SIGINT', 'SIGQUIT', 'SIGILL', 'SIGTRAP', 'SIGABRT', 'SIGBUS', 'SIGFPE', 'SIGUSR1', 'SIGSEGV', 'SIGUSR2', 'SIGTERM'],
-    production = process.env.NODE_ENV == 'production';
+    production = process.env.NODE_ENV === 'production';
 
 var defaults = _osnovaLib.core.defaults;
 

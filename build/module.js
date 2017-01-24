@@ -14,7 +14,6 @@ var Module = function () {
 
     this.name = name;
     this.fn = fn.bind(this);
-    this.ready = false;
   }
 
   _createClass(Module, [{
