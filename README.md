@@ -16,10 +16,15 @@ Wow such ready-to-go much time to watch anime!
 
 ##Install
 
-    npm i osnova [--save] [--production]
+via npm: 
 
- Use **--production** in the most cases. It will not install any build-related stuff. (Honestly, there is no reason to build it by yourself.)
+    npm i osnova [--save] 
+    
+via yarn:
 
+    yarn add osnova
+   
+    
 ###Usage
     
     const OSNOVA = require('osnova');
@@ -81,8 +86,6 @@ This is a default import and available via:
 
 - **opts.master** [true/false]: 
 Default: false. Flag. Is current instance of osnova will be launched in master thread.
-- **opts.start** [function(osnova object)]:
-Function-starter. Will be called after initialize state.
 - **opts.core** [object]:
 - **opts.core.paths** [object]:
 - `!`**opts.core.paths.root** [string]: Absolute project root path. MUST be defined! Used in Express and in low-level configurator.
@@ -128,9 +131,9 @@ Adds custom module to OSNOVA. Should be called after `osnova = OSNOVA.Server()` 
 See [OsnovaModule](#osnovamoduledesc) for details.
 
 ####.start()
-**@in** -  
+**@in** `callback` [function(osnova)]  
 **@return** -  
-Starts the server. Any code in flow after this function will never be executed.
+Starts the server and execute callback with osnova as a parameter. Any code in flow after this function will never be executed.
 
 ###OsnovaModule
 
