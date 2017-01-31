@@ -12,6 +12,23 @@ const {
   defaults
 } = lib.core;
 
+const consoleLinesBigSeparator = `----------------------------------------`;
+
+const getHelloLines = (name, version) => {
+  return [
+    consoleLinesBigSeparator,
+    `Welcome to ${name} v${version}`,
+    consoleLinesBigSeparator
+  ];
+};
+
+const printHello = (name, version) => {
+  const helloLines = getHelloLines(name, version);
+  for (let i = 0; i < helloLines.length; i++) {
+    console.log(helloLines[i]);
+  }
+};
+
 const OSNOVA = function(opts = {}) {
   opts.master = opts.master || false;
 
@@ -36,9 +53,8 @@ const OSNOVA = function(opts = {}) {
   this.ee.on('ALL_MODULES_READY', this.onAllModulesReady.bind(this));
 
   // process built-in core modules
-  //
 
-  if (this.opts.core.mongo) {
+  if (this.opts.core.use.mongo) {
     this.add(require('./modules/mongo'), 'mongo');
   }
 
@@ -46,16 +62,21 @@ const OSNOVA = function(opts = {}) {
 
   } else {
 
-    if (this.opts.core.express) {
-      this.add(require('./modules/express'), 'express');
+    if (this.opts.core.use.express) {
+      this.add(require('./modules/express')({
+        paths: {
+          root: opts.core.paths.absoluteRoot,
+          static: opts.core.paths.static
+        }
+      }), 'express');
     }
 
-    if (this.opts.core.session) {
-      this.add(require('./modules/session'), 'session');
+    if (this.opts.core.use.session) {
+      this.add(require('./modules/session')({}), 'session');
     }
 
-    if (this.opts.core.socketio) {
-      this.add(require('./modules/socket')({ auth: this.opts.core.auth }), 'socket');
+    if (this.opts.core.use.socketio) {
+      this.add(require('./modules/socket')({ auth: this.opts.core.use.auth }), 'socket');
     }
   }
 
@@ -72,8 +93,6 @@ const OSNOVA = function(opts = {}) {
 
 OSNOVA.prototype = Object.create(null);
 OSNOVA.prototype.constructor = OSNOVA;
-
-
 
 // add module to the queue
 // if the queue is empty - this is first module and the current
@@ -124,10 +143,15 @@ function executeModule(osnova, module) {
 }
 
 // Triggered by moduleReady()
-OSNOVA.prototype.onModuleReady = function (module) {
+OSNOVA.prototype.onModuleReady = function (module, result) {
   if (!module) return;
 
   console.log(`Module ${module.name} is ready`);
+
+  // copy result of module work to OSNOVA
+  if (result !== undefined && result !== null) {
+    Object.assign(this, result);
+  }
 
   // since current module is ready - move to the next one
   this.currentModule = module.nextModule;
@@ -146,9 +170,12 @@ OSNOVA.prototype.onModuleReady = function (module) {
 // If some module won't call this function - module loading process will stuck on this module forever.
 // Since modules are executed in a sequence - if this function is called inside the module code - this module
 // is currentModule and we don't need to know it's name to say to system what module is ready.
-OSNOVA.prototype.moduleReady = function () {
-  this.ee.emit('MODULE_READY', this.currentModule);
+// @result - object with data that will be attached to OSNOVA.
+OSNOVA.prototype.moduleReady = function (result) {
+  this.ee.emit('MODULE_READY', this.currentModule, result);
 };
+
+OSNOVA.prototype.next = OSNOVA.prototype.moduleReady;
 
 OSNOVA.prototype.loadModules = function () {
   const modules = this.moduleQueue;
@@ -181,22 +208,18 @@ OSNOVA.prototype.listen = function () {
 
   // Listen to messages sent from the master. Ignore everything else.
   process.on('message', function(message, connection) {
-    if (message !== 'sticky-session:connection') {
-      return;
+    if (message === 'sticky-session:connection') {
+      // Emulate a connection event on the server by emitting the
+      // event with the connection the master sent us.
+      server.emit('connection', connection);
+      connection.resume();
     }
-
-    // Emulate a connection event on the server by emitting the
-    // event with the connection the master sent us.
-    server.emit('connection', connection);
-    connection.resume();
   });
 };
 
 // Entry point of the server.
-//
 OSNOVA.prototype.start = function (callback) {
-  console.log('-----------------------------------------------------------');
-  console.log('OSNOVA v' + this.__version);
+  printHello('OSNOVA', this.__version);
 
   if (isFunction(callback)) {
     this.add((osnova) => {
@@ -207,8 +230,6 @@ OSNOVA.prototype.start = function (callback) {
 
   this.loadModules();
 };
-
-OSNOVA.prototype.on = function(state, action, args) { fn.addAction(this, state, action, args); };
 
 export default function OSNOVA_DEFAULT(opts) {
   return new OSNOVA(opts);

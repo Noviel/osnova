@@ -22,9 +22,7 @@ export default function socket (opts) {
       console.log('socket disconnected');
     }, false);
 
-    osnova.io = io;
-
-    osnova.moduleReady();
+    osnova.next({ io });
   };
 }
 

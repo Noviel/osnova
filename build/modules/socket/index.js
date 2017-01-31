@@ -30,9 +30,7 @@ function socket(opts) {
       console.log('socket disconnected');
     }, false);
 
-    osnova.io = io;
-
-    osnova.moduleReady();
+    osnova.next({ io: io });
   };
 } // Created by snov on 18.09.2016.
 

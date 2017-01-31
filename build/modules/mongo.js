@@ -18,16 +18,18 @@ function connect(osnova) {
   } else {
     connectString = config.target.database.path + config.target.database.name;
   }
-  return osnova.connection = mongoose.connect(connectString).connection;
+  return mongoose.connect(connectString).connection;
 }
 
 function mongo(osnova) {
-  connect(osnova).on('error', console.error.bind(console, 'connection error:')).on('disconnected', function () {
-    connect(osnova);
+  var connection = connect(osnova);
+
+  connection.on('error', console.error.bind(console, 'connection error:')).on('disconnected', function () {
+    connection = connect(osnova);
   }).once('open', function () {
     console.log('Connected to MongoDB.');
     if (isFirstTimeConnected) {
-      osnova.moduleReady();
+      osnova.next({ connection: connection });
       isFirstTimeConnected = false;
     }
   });

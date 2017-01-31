@@ -3,26 +3,24 @@
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 
-function fn(osnova) {
+const { defaults }  =require('osnova-lib').core;
+
+const defConfig = (osnova) => ({
+  resave: false,
+  saveUninitialized: false,
+  secret: osnova.opts.core.session.secret,
+  key: osnova.opts.core.session.key,
+});
+
+const entry = (config) => osnova => {
   const app = osnova.express;
 
-  const config = {
-    mongooseConnection: osnova.connection,
-    secret: osnova.opts.core.session.secret,
-    key: osnova.opts.core.session.key,
-    resave: false,
-    saveUninitialized: false
-  };
+  const finConfig = defaults(config, defConfig(osnova));
+  finConfig.store = new MongoStore({ mongooseConnection: osnova.connection });
 
-  if (!config.store) {
-    config.store = new MongoStore({ mongooseConnection: config.mongooseConnection });
-  }
+  app.use(session(finConfig));
 
-  app.use(session(config));
+  osnova.next({ sessionStore: finConfig.store});
+};
 
-  osnova.sessionStore = config.store;
-
-  osnova.moduleReady();
-}
-
-module.exports = fn;
+module.exports = entry;

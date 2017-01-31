@@ -16,17 +16,19 @@ function connect(osnova) {
   } else {
     connectString = config.target.database.path + config.target.database.name;
   }
-  return osnova.connection = mongoose.connect(connectString).connection;
+  return mongoose.connect(connectString).connection;
 }
 
 function mongo(osnova) {
-  connect(osnova)
+  let connection = connect(osnova);
+
+  connection
     .on('error', console.error.bind(console, 'connection error:'))
-    .on('disconnected', () => { connect(osnova); })
+    .on('disconnected', () => { connection = connect(osnova); })
     .once('open', () => {
       console.log('Connected to MongoDB.');
       if (isFirstTimeConnected) {
-        osnova.moduleReady();
+        osnova.next({ connection });
         isFirstTimeConnected = false;
       }
     });

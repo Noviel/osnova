@@ -4,8 +4,7 @@ const path    = require('path');
 
 module.exports = exports = {
   paths: {
-    public: './public',
-    views:  './private/views'
+    static: './public'
   },
 
   session: {
@@ -18,11 +17,5 @@ module.exports = exports = {
     socketio: true,
     session: true,
     mongo: true
-  },
-
-  template: 'pug',
-
-  socketio: true,
-  express: true,
-  mongo: true
+  }
 };
