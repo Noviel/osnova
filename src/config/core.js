@@ -7,7 +7,7 @@ module.exports = exports = {
     absolute: {
       root: 'MUST BE SPECIFIED IN OSNOVA CORE OPTIONS'
     },
-    static: './public'
+    assets: './public'
   },
 
   session: {

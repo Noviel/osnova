@@ -34,7 +34,7 @@ const OSNOVA = function(opts = {}) {
 
   opts.master = opts.master || false;
   opts.core = defaults(opts.core, require('./config/core'));
-  opts.core.paths.absolute.static = path.resolve(opts.core.paths.absolute.root, opts.core.paths.static);
+  opts.core.paths.absolute.assets = path.resolve(opts.core.paths.absolute.root, opts.core.paths.assets);
 
   this.opts       = opts;
 
@@ -64,13 +64,7 @@ const OSNOVA = function(opts = {}) {
   } else {
 
     if (this.opts.core.use.express) {
-      this.add(require('./modules/express')({
-        paths: {
-          absolute: {
-            static: opts.core.paths.absolute.static
-          }
-        }
-      }), 'express');
+      this.add(require('./modules/express')({}), 'express');
     }
 
     if (this.opts.core.use.session) {
