@@ -21,7 +21,7 @@ var out = function out(opts) {
     express.use(compression());
     //app.set('view engine', config.template);
     //app.set('views', path.resolve(root, config.paths.views));
-    express.use(Express.static(path.resolve(opts.paths.root, opts.paths.static)));
+    express.use(Express.static(path.resolve(opts.paths.absolute.static)));
     express.use(bodyParser.json());
     express.use(bodyParser.urlencoded({ extended: false }));
     express.use(cookieParser());

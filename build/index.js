@@ -45,10 +45,10 @@ var OSNOVA = function OSNOVA() {
   opts.master = opts.master || false;
   opts.core = defaults(opts.core, require('./config/core'));
 
-  var paths = opts.core.paths;
+  console.log(opts.core);
+  opts.core.paths.absolute.static = path.resolve(opts.core.paths.absolute.root, opts.core.paths.static);
 
-  paths.absolute.static = path.resolve(paths.absolute.root, paths.static);
-
+  console.log(opts.core);
   this.opts = opts;
 
   // module loading stuff
