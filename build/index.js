@@ -40,11 +40,15 @@ var printHello = function printHello(name, version) {
 var OSNOVA = function OSNOVA() {
   var opts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-  opts.master = opts.master || false;
+  this.__version = require('../package.json').version;
 
+  opts.master = opts.master || false;
   opts.core = defaults(opts.core, require('./config/core'));
 
-  this.__version = require('../package.json').version;
+  var paths = opts.core.paths;
+
+  paths.absolute.static = path.resolve(paths.absolute.root, paths.static);
+
   this.opts = opts;
 
   // module loading stuff

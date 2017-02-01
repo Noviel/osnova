@@ -4,6 +4,9 @@ const path    = require('path');
 
 module.exports = exports = {
   paths: {
+    absolute: {
+      root: 'MUST BE SPECIFIED IN OSNOVA CORE OPTIONS'
+    },
     static: './public'
   },
 

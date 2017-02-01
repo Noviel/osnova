@@ -7,7 +7,7 @@ const target = {
 };
 
 const paths = {
-  absoluteRoot: require('path').resolve(__dirname),
+  absolute: { root: require('path').resolve(__dirname) },
   static: './static'
 };
 
