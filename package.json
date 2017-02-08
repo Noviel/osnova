@@ -1,5 +1,5 @@
 {
-  "author": "Sasha snov Noviel <snov.contact@gmail.com>",
+  "author": "Aleksandr snov Noviel <snov.contact@gmail.com>",
   "dependencies": {
     "axon": "^2.0.2",
     "bcryptjs": "^2.3.0",
@@ -27,7 +27,7 @@
     "babel-preset-es2017": "^6.14.0",
     "babel-preset-latest": "6.22"
   },
-  "license": "ISC",
+  "license": "MIT",
   "main": "build/index.js",
   "maintainers": [
     {
@@ -44,5 +44,5 @@
     "patch-release": "npm --no-git-tag-version version patch && npm publish",
     "test": "npm run build && node __TEST__/index.js"
   },
-  "version": "0.17.9"
+  "version": "0.17.10"
 }
