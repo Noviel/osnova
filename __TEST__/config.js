@@ -8,7 +8,7 @@ const target = {
 
 const paths = {
   absolute: { root: require('path').resolve(__dirname) },
-  static: './static'
+  assets: './static'
 };
 
 module.exports = {};

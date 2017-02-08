@@ -12,19 +12,19 @@ var _core2 = _interopRequireDefault(_core);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function socket(opts) {
-  var authOpts = opts.auth ? {
-    cookieParser: osnova.cookieParser,
-    key: osnova.opts.core.session.key,
-    secret: osnova.opts.core.session.secret,
-    sessionStore: osnova.sessionStore
-  } : null;
 
   return function socketio(osnova) {
+
+    var authOpts = opts.auth ? {
+      cookieParser: osnova.cookieParser,
+      key: osnova.opts.core.session.key,
+      secret: osnova.opts.core.session.secret,
+      sessionStore: osnova.sessionStore
+    } : null;
+
     var http = osnova.http;
 
     var io = new _core2.default(http, authOpts);
-
-    io.on = io.socketEvent;
 
     io.socketEvent('disconnect', function () {
       console.log('socket disconnected');

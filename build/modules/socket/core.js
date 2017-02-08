@@ -87,3 +87,6 @@ var Socket = function () {
 }();
 
 exports.default = Socket;
+
+
+Socket.prototype.on = Socket.prototype.socketEvent;

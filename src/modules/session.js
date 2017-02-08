@@ -3,24 +3,34 @@
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 
-const { defaults }  =require('osnova-lib').core;
+const { defaults }  = require('osnova-lib').core;
 
-const defConfig = (osnova) => ({
-  resave: false,
-  saveUninitialized: false,
-  secret: osnova.opts.core.session.secret,
-  key: osnova.opts.core.session.key,
-});
+const defConfig = (osnova) => {
+  const { secret, key } = osnova.opts.core.session;
+  return {
+    resave: false,
+    saveUninitialized: false,
+    secret,
+    key
+  };
+};
 
-const entry = (config) => osnova => {
-  const app = osnova.express;
+// opts.express [?] - external express app apply session to.
+// opts.store [?]
+// opts.connection [?]
+const entry = opts => osnova => {
+  const app = osnova.express || opts.express;
 
-  const finConfig = defaults(config, defConfig(osnova));
-  finConfig.store = new MongoStore({ mongooseConnection: osnova.connection });
+  if (!app) {
+    throw new Error('Express is not defined. Turn on express module in osnova or specify it in options.');
+  }
 
-  app.use(session(finConfig));
+  const config = defaults(opts.config, defConfig(osnova));
+  config.store = config.store || new MongoStore({ mongooseConnection: config.connection || osnova.connection });
 
-  osnova.next({ sessionStore: finConfig.store});
+  app.use(session(config));
+
+  osnova.next({ sessionStore: config.store });
 };
 
 module.exports = entry;

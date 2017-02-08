@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const Bluebird = require('bluebird');
 
 mongoose.Promise = Bluebird;
-Bluebird.promisifyAll(require('mongoose'));
+Bluebird.promisifyAll(mongoose);
 
 let isFirstTimeConnected = true;
 
@@ -19,7 +19,7 @@ function connect(osnova) {
   return mongoose.connect(connectString).connection;
 }
 
-function mongo(osnova) {
+const mongo = osnova => {
   let connection = connect(osnova);
 
   connection
@@ -28,10 +28,10 @@ function mongo(osnova) {
     .once('open', () => {
       console.log('Connected to MongoDB.');
       if (isFirstTimeConnected) {
-        osnova.next({ connection });
         isFirstTimeConnected = false;
+        osnova.next({ connection });
       }
     });
-}
+};
 
 module.exports = mongo;

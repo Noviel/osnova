@@ -11,7 +11,7 @@ module.exports = () => {
     const app = osnova.express;
 
     app.get('/', (req, res) => {
-      res.sendFile('index.html', { root: osnova.opts.core.paths.absolute.static });
+      res.sendFile('index.html', { root: osnova.opts.core.paths.absolute.assets });
     });
   });
 

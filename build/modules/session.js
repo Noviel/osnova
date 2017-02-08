@@ -8,24 +8,35 @@ var MongoStore = require('connect-mongo')(session);
 var defaults = require('osnova-lib').core.defaults;
 
 var defConfig = function defConfig(osnova) {
+  var _osnova$opts$core$ses = osnova.opts.core.session,
+      secret = _osnova$opts$core$ses.secret,
+      key = _osnova$opts$core$ses.key;
+
   return {
     resave: false,
     saveUninitialized: false,
-    secret: osnova.opts.core.session.secret,
-    key: osnova.opts.core.session.key
+    secret: secret,
+    key: key
   };
 };
 
-var entry = function entry(config) {
+// opts.express [?] - external express app apply session to.
+// opts.store [?]
+// opts.connection [?]
+var entry = function entry(opts) {
   return function (osnova) {
-    var app = osnova.express;
+    var app = osnova.express || opts.express;
 
-    var finConfig = defaults(config, defConfig(osnova));
-    finConfig.store = new MongoStore({ mongooseConnection: osnova.connection });
+    if (!app) {
+      throw new Error('Express is not defined. Turn on express module in osnova or specify it in options.');
+    }
 
-    app.use(session(finConfig));
+    var config = defaults(opts.config, defConfig(osnova));
+    config.store = config.store || new MongoStore({ mongooseConnection: config.connection || osnova.connection });
 
-    osnova.next({ sessionStore: finConfig.store });
+    app.use(session(config));
+
+    osnova.next({ sessionStore: config.store });
   };
 };
 

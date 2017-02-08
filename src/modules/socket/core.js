@@ -40,7 +40,7 @@ export default class Socket {
 
     this.io = io;
 
-    var self = this;
+    const self = this;
 
     io.on('connection', socket => {
       console.log('socket connected.');
@@ -65,3 +65,5 @@ export default class Socket {
     }
   }
 }
+
+Socket.prototype.on = Socket.prototype.socketEvent;

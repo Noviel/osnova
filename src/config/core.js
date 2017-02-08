@@ -5,13 +5,13 @@ const path    = require('path');
 module.exports = exports = {
   paths: {
     absolute: {
-      root: 'MUST BE SPECIFIED IN OSNOVA CORE OPTIONS'
+      root: process.cwd()
     },
     assets: './public'
   },
 
   session: {
-    key: 'dqnt.sid',
+    key: 'osnova.sid',
     secret: 'W09lWi11$HiN4'
   },
 
@@ -19,6 +19,7 @@ module.exports = exports = {
     express: true,
     socketio: true,
     session: true,
-    mongo: true
+    mongo: true,
+    auth: true
   }
 };
