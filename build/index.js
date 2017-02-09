@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Module = exports.launch = exports.Server = undefined;
+exports.Server = undefined;
 exports.default = OSNOVA_DEFAULT;
 
 var _osnovaLib = require('osnova-lib');
@@ -220,5 +220,3 @@ function OSNOVA_DEFAULT(opts) {
 }
 
 var Server = exports.Server = OSNOVA_DEFAULT;
-var launch = exports.launch = require('./multiprocess.launcher');
-var Module = exports.Module = require('./module');
