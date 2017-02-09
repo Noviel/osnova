@@ -1,16 +1,11 @@
 **OSNOVA**
 
-The way to use the all power of multicore processors on the server made on node.js.
+Modular Node.js server.
 
-Include:
-- Express as a web server.
-- Passport as an authorization system.
-- Mongoose for work with MongoDB.
-- Axon for IPC.
-- Socket.IO for the client-server communication.
-
-Every worker and the master are isolated processes. A web-server starts on the every worker. So any client requests must be processed in a worker code.
-Master is used to distribute client connections between workers and provides communication of workers with master and between each other. 
+Includes:
+- Express
+- Socket.IO
+- Mongoose
 
 Wow such ready-to-go much time to watch anime!
 
@@ -28,18 +23,14 @@ via yarn:
 ###Usage
     
     const OSNOVA = require('osnova');
-    const osnovaMaster = OSNOVA.Server(/* masterOpts */);
-    const osnovaWorker = OSNOVA.Server(/* workerOpts */);
-    
-    OSNOVA.launch({
-      worker: () => { osnovaWorker.start(); },
-      master: () => { osnovaMaster.start(); },
-      config: {
-        threads: 3,
-        host: { ip: 'localhost', port: 3337 }
-      }
+    const server = OSNOVA.Server({
+      listen: 'default'
     });
     
+    server.start((osnova) => {
+      console.log('hello');
+    });
+        
     
 ####Accessing the components
 

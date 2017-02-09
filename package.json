@@ -18,7 +18,7 @@
     "pug": "^2.0.0-beta3",
     "socket.io": "^1.7.2"
   },
-  "description": "Multithreaded node.js Web-server",
+  "description": "Modular node.js server",
   "devDependencies": {
     "babel-cli": "^6.10.1",
     "babel-core": "^6.9.1",
@@ -41,8 +41,7 @@
     "build": "babel src -d build",
     "major-release": "npm --no-git-tag-version version major && npm publish",
     "minor-release": "npm --no-git-tag-version version minor && npm publish",
-    "patch-release": "npm --no-git-tag-version version patch && npm publish",
-    "test": "npm run build && node __TEST__/index.js"
+    "patch-release": "npm --no-git-tag-version version patch && npm publish"
   },
-  "version": "0.19.0"
+  "version": "0.20.0"
 }
