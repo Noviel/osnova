@@ -30,12 +30,8 @@ const printHello = (name, version) => {
 };
 
 const defaultListen = (opts) => (http) => {
-  const defaultOpts = {
-    port: process.env.PORT || process.env.NODE_PORT || 5000,
-    ip: process.env.NODE_IP || '0.0.0.0'
-  };
 
-  const { port, ip } = defaults(opts, defaultOpts);
+  const { port, ip } = opts;
 
   http.listen(port, ip, () => {
     console.log(`Default http server started on ${ip}:${port}`);
@@ -52,7 +48,7 @@ const OSNOVA = function(opts = {}) {
   this.opts = opts;
 
   if (opts.listen === 'default') {
-    opts.listen = defaultListen(opts.host);
+    opts.listen = defaultListen(opts.core.target.host);
   }
 
   this.workerListen = opts.listen;

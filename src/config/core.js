@@ -10,6 +10,13 @@ module.exports = exports = {
     assets: './public'
   },
 
+  target: {
+    host: {
+      port: process.env.PORT || process.env.NODE_PORT || 5000,
+      ip: process.env.NODE_IP || 'localhost'
+    }
+  },
+
   session: {
     key: 'osnova.sid',
     secret: 'W09lWi11$HiN4'

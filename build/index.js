@@ -39,14 +39,9 @@ var printHello = function printHello(name, version) {
 
 var defaultListen = function defaultListen(opts) {
   return function (http) {
-    var defaultOpts = {
-      port: process.env.PORT || process.env.NODE_PORT || 5000,
-      ip: process.env.NODE_IP || '0.0.0.0'
-    };
+    var port = opts.port,
+        ip = opts.ip;
 
-    var _defaults = defaults(opts, defaultOpts),
-        port = _defaults.port,
-        ip = _defaults.ip;
 
     http.listen(port, ip, function () {
       console.log('Default http server started on ' + ip + ':' + port);
@@ -66,7 +61,7 @@ var OSNOVA = function OSNOVA() {
   this.opts = opts;
 
   if (opts.listen === 'default') {
-    opts.listen = defaultListen(opts.host);
+    opts.listen = defaultListen(opts.core.target.host);
   }
 
   this.workerListen = opts.listen;
