@@ -44,5 +44,5 @@
     "patch-release": "npm --no-git-tag-version version patch && npm publish",
     "test": "npm run build && node __TEST__/index.js"
   },
-  "version": "0.17.10"
+  "version": "0.18.1"
 }

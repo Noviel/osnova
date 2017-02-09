@@ -17,11 +17,11 @@ var out = function out(opts) {
   return function (osnova) {
     var express = Express();
     var http = Http.Server(express);
+    var assetsPath = osnova.opts.core.paths.absolute.assets;
+
 
     express.use(compression());
-    //app.set('view engine', config.template);
-    //app.set('views', path.resolve(root, config.paths.views));
-    express.use(Express.static(osnova.opts.core.paths.absolute.assets));
+    express.use(Express.static(assetsPath));
     express.use(bodyParser.json());
     express.use(bodyParser.urlencoded({ extended: false }));
     express.use(cookieParser());

@@ -48,6 +48,8 @@ var OSNOVA = function OSNOVA() {
 
   this.opts = opts;
 
+  this.workerListen = opts.listen;
+
   // module loading stuff
   this.moduleQueue = [];
 
@@ -65,22 +67,24 @@ var OSNOVA = function OSNOVA() {
 
   // process built-in core modules
 
-  if (this.opts.core.use.mongo) {
+  var usage = opts.core.use;
+
+  if (usage.mongo) {
     this.add(require('./modules/mongo'), 'mongo');
   }
 
-  if (this.opts.master) {} else {
+  if (opts.master) {} else {
 
-    if (this.opts.core.use.express) {
+    if (usage.express) {
       this.add(require('./modules/express')({}), 'express');
     }
 
-    if (this.opts.core.use.session) {
+    if (usage.session) {
       this.add(require('./modules/session')({}), 'session');
     }
 
-    if (this.opts.core.use.socketio) {
-      this.add(require('./modules/socket')({ auth: this.opts.core.use.auth }), 'socket');
+    if (usage.socketio) {
+      this.add(require('./modules/socket')({ auth: usage.auth }), 'socket');
     }
   }
 
@@ -134,20 +138,21 @@ OSNOVA.prototype.add = function (module, name) {
 
 OSNOVA.prototype.onAllModulesReady = function () {
   console.log('All modules are ready. Booting...');
-  this.launch();
+
+  if (!this.opts.master && this.workerListen) {
+    this.workerListen(this.http);
+  }
 };
 
 function executeModule(osnova, module) {
-  if (module) {
-    console.log('Executing module ' + module.name);
-    module.fn(osnova);
-  } else {
-    osnova.ee.emit('ALL_MODULES_READY');
-  }
+  console.log('Executing module ' + module.name);
+  module.fn(osnova);
 }
 
 // Triggered by moduleReady()
-OSNOVA.prototype.onModuleReady = function (module, result) {
+OSNOVA.prototype.onModuleReady = function (result) {
+  var module = this.currentModule;
+
   if (!module) return;
 
   console.log('Module ' + module.name + ' is ready');
@@ -176,7 +181,7 @@ OSNOVA.prototype.onModuleReady = function (module, result) {
 // is currentModule and we don't need to know it's name to say to system what module is ready.
 // @result - object with data that will be attached to OSNOVA.
 OSNOVA.prototype.moduleReady = function (result) {
-  this.ee.emit('MODULE_READY', this.currentModule, result);
+  this.ee.emit('MODULE_READY', result);
 };
 
 OSNOVA.prototype.next = OSNOVA.prototype.moduleReady;
@@ -189,36 +194,9 @@ OSNOVA.prototype.loadModules = function () {
       modules[i].fn(this);
     }
   } else {
-    // We must always execute currentModule in order to moduleReady points on the correct one.
     this.currentModule = this.firstModule;
     executeModule(this, this.currentModule);
   }
-};
-
-OSNOVA.prototype.launch = function () {
-  if (this.opts.master) {
-    console.log('OSNOVA::master started.');
-  } else {
-    this.listen();
-  }
-};
-
-OSNOVA.prototype.listen = function () {
-  var http = this.http;
-
-  var server = http.listen(0 /*config.target.host.port*/, 'localhost' /*config.target.host.ip*/, function () {
-    console.log('OSNOVA::worker pid:' + process.pid + ' started...');
-  });
-
-  // Listen to messages sent from the master. Ignore everything else.
-  process.on('message', function (message, connection) {
-    if (message === 'sticky-session:connection') {
-      // Emulate a connection event on the server by emitting the
-      // event with the connection the master sent us.
-      server.emit('connection', connection);
-      connection.resume();
-    }
-  });
 };
 
 // Entry point of the server.
@@ -230,7 +208,7 @@ OSNOVA.prototype.start = function (callback) {
   if (isFunction(callback)) {
     this.add(function (osnova) {
       callback(osnova);
-      _this.moduleReady();
+      _this.next();
     });
   }
 

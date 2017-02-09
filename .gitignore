@@ -1,6 +1,3 @@
 # Created by .ignore support plugin (hsz.mobi)
 node_modules
 .idea
-/test/*
-test.config.js
-npm-debug.log.*

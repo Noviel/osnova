@@ -1,5 +1,10 @@
 const myModule = require('./mymodule');
-const opts = { core: require('./config').core };
+
+const opts = {
+  core: require('./config').core,
+  listen: require('../build/sticky-listen')
+};
+
 const OSNOVA = require('../build');
 const osnova = OSNOVA.Server(opts);
 

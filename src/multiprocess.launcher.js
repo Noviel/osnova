@@ -1,8 +1,7 @@
 const util = require('util');
-const cluster = require('cluster'),
-      net = require('net'),
+const cluster = require('cluster');
 
-      stopSignals = [
+const stopSignals = [
         'SIGHUP', 'SIGINT', 'SIGQUIT', 'SIGILL', 'SIGTRAP', 'SIGABRT',
         'SIGBUS', 'SIGFPE', 'SIGUSR1', 'SIGSEGV', 'SIGUSR2', 'SIGTERM'
       ],
@@ -11,6 +10,14 @@ const cluster = require('cluster'),
 
 import { core } from 'osnova-lib';
 const defaults = core.defaults;
+
+const spawn = (workers, i) => {
+  workers[i] = cluster.fork();
+  workers[i].on('exit', function (code, signal) {
+    console.log('respawning worker', i);
+    spawn(workers, i);
+  });
+};
 
 const defaultTarget = {
   threads: 1,
@@ -22,7 +29,13 @@ const defaultTarget = {
 };
 
 function launch(opts) {
+
   let stopping = false;
+  console.log(opts);
+  const target = defaults(opts.config, defaultTarget);
+  const port = target.host.port;
+  const ip = target.host.ip;
+  const threads = target.threads;
 
   cluster.on('disconnect', function (worker) {
     if (production) {
@@ -34,11 +47,6 @@ function launch(opts) {
     }
   });
 
-  const target = defaults(opts.config, defaultTarget);
-  const port = target.host.port;
-  const ip = target.host.ip;
-  const threads = target.threads;
-
   let workers = [];
 
   if (cluster.isMaster) {
@@ -46,39 +54,13 @@ function launch(opts) {
 
     console.log(`Starting ${workerCount} workers...`);
 
-    const spawn = function (i) {
-      workers[i] = cluster.fork();
-      workers[i].on('exit', function (code, signal) {
-        console.log('respawning worker', i);
-        spawn(i);
-      });
-    };
-
     for (let i = 0; i < workerCount; i++) {
-      spawn(i);
+      spawn(workers, i);
     }
-
-    const workerIndex = function (ip, len) {
-      let s = '';
-      for (let i = 0, _len = ip.length; i < _len; i++) {
-        if (!isNaN(ip[i])) {
-          s += ip[i];
-        }
-      }
-
-      return Number(s) % len;
-    };
 
     cluster.on('exit', (worker, code, signal) => {
       console.log(`worker ${worker.process.pid} died`);
     });
-
-    const server = net.createServer({pauseOnConnect: true}, connection => {
-      const worker = workers[workerIndex(connection.remoteAddress, workerCount)];
-      worker.send('sticky-session:connection', connection);
-    }).listen(port);
-
-    console.log(`Web server started on ${ip}:${port}`);
 
     if (production) {
       stopSignals.forEach(function (signal) {
@@ -95,9 +77,13 @@ function launch(opts) {
       });
     }
 
-    opts.master();
+    if (core.isFunction(opts.master.listen)) {
+      opts.master.listen({ip, port, workers, workerCount});
+    }
+
+    opts.master.main(opts.master.listen);
   } else {
-    opts.worker();
+    opts.worker.main(opts.worker.listen);
   }
 }
 

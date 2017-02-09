@@ -11,11 +11,10 @@ const compression = require('compression');
 const out = opts => osnova => {
   const express  = Express();
   const http = Http.Server(express);
+  const { assets: assetsPath } = osnova.opts.core.paths.absolute;
 
   express.use(compression());
-  //app.set('view engine', config.template);
-  //app.set('views', path.resolve(root, config.paths.views));
-  express.use(Express.static(osnova.opts.core.paths.absolute.assets));
+  express.use(Express.static(assetsPath));
   express.use(bodyParser.json());
   express.use(bodyParser.urlencoded({ extended: false }));
   express.use(cookieParser());
