@@ -41,7 +41,8 @@
     "build": "babel src -d build",
     "major-release": "npm --no-git-tag-version version major && npm publish",
     "minor-release": "npm --no-git-tag-version version minor && npm publish",
-    "patch-release": "npm --no-git-tag-version version patch && npm publish"
+    "patch-release": "npm --no-git-tag-version version patch && npm publish",
+    "prepublish": "npm run build"
   },
-  "version": "0.20.0"
+  "version": "0.20.1"
 }

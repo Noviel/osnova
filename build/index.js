@@ -37,6 +37,23 @@ var printHello = function printHello(name, version) {
   }
 };
 
+var defaultListen = function defaultListen(opts) {
+  return function (http) {
+    var defaultOpts = {
+      port: process.env.PORT || process.env.NODE_PORT || 5000,
+      ip: process.env.NODE_IP || '0.0.0.0'
+    };
+
+    var _defaults = defaults(opts, defaultOpts),
+        port = _defaults.port,
+        ip = _defaults.ip;
+
+    http.listen(port, ip, function () {
+      console.log('Default http server started on ' + ip + ':' + port);
+    });
+  };
+};
+
 var OSNOVA = function OSNOVA() {
   var opts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
@@ -47,6 +64,10 @@ var OSNOVA = function OSNOVA() {
   opts.core.paths.absolute.assets = path.resolve(opts.core.paths.absolute.root, opts.core.paths.assets);
 
   this.opts = opts;
+
+  if (opts.listen === 'default') {
+    opts.listen = defaultListen(opts.host);
+  }
 
   this.workerListen = opts.listen;
 
