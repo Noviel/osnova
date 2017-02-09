@@ -61,10 +61,13 @@ var OSNOVA = function OSNOVA() {
   this.opts = opts;
 
   if (opts.listen === 'default') {
+    if (opts.master) {
+      throw new Error('Default http listen can not be used on master! Specify extern listen function!');
+    }
     opts.listen = defaultListen(opts.core.target.host);
   }
 
-  this.workerListen = opts.listen;
+  this.listen = opts.listen;
 
   // module loading stuff
   this.moduleQueue = [];
@@ -155,8 +158,8 @@ OSNOVA.prototype.add = function (module, name) {
 OSNOVA.prototype.onAllModulesReady = function () {
   console.log('All modules are ready. Booting...');
 
-  if (!this.opts.master && this.workerListen) {
-    this.workerListen(this.http);
+  if (isFunction(this.listen)) {
+    this.listen(this.http);
   }
 };
 

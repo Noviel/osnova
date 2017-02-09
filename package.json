@@ -44,5 +44,5 @@
     "patch-release": "npm --no-git-tag-version version patch && npm publish",
     "prepublish": "npm run build"
   },
-  "version": "0.20.2"
+  "version": "0.20.4"
 }
