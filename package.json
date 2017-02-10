@@ -45,5 +45,5 @@
     "prepublish": "npm run build",
     "test": "npm run build && node __TEST__/test.js"
   },
-  "version": "0.21.8"
+  "version": "0.23.0"
 }

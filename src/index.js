@@ -59,7 +59,7 @@ const OSNOVA = function(opts = {}) {
   this.opts = opts;
 
   if (opts.listen === 'default') {
-    opts.listen = defaultListen(opts.core.target.host);
+    opts.listen = defaultListen(opts.core.host);
   }
 
   this.listen = opts.listen;

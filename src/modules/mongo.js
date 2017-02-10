@@ -9,12 +9,12 @@ Bluebird.promisifyAll(mongoose);
 let isFirstTimeConnected = true;
 
 function connect(osnova) {
-  const config = osnova.opts.core;
+  const config = osnova.opts.core.database;
   let connectString;
-  if (config.target.database.uri) {
-    connectString = config.target.database.uri;
+  if (config.uri) {
+    connectString = config.uri;
   } else {
-    connectString = config.target.database.path + config.target.database.name;
+    connectString = config.path + config.name;
   }
   return mongoose.connect(connectString).connection;
 }

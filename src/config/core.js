@@ -10,11 +10,14 @@ module.exports = exports = {
     assets: './public'
   },
 
-  target: {
-    host: {
-      port: process.env.PORT || process.env.NODE_PORT || 5000,
-      ip: process.env.NODE_IP || 'localhost'
-    }
+  host: {
+    port: process.env.PORT || process.env.NODE_PORT || 5000,
+    ip: process.env.NODE_IP || 'localhost'
+  },
+
+  database: {
+    type: 'mongo',
+    uri: 'should be provided from beyond!'
   },
 
   session: {
