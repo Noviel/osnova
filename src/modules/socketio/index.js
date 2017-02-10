@@ -3,6 +3,7 @@
 import Socket from './core';
 
 const socket = opts => osnova => {
+  opts = opts || {};
   const authOpts = opts.auth ?
     {
       cookieParser: osnova.cookieParser,

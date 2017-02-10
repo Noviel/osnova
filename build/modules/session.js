@@ -28,13 +28,14 @@ var defConfig = function defConfig(osnova) {
 // opts.connection [?]
 var entry = function entry(opts) {
   return function (osnova) {
+    opts = opts || {};
     var app = osnova.express || opts.express;
 
     if (!app) {
       throw new Error('Express is not defined. Turn on express module in osnova or specify it in options.');
     }
 
-    var config = defaults(opts.config, defConfig(osnova));
+    var config = defaults(opts, defConfig(osnova));
     config.store = config.store || new MongoStore({ mongooseConnection: config.connection || osnova.connection });
 
     app.use(session(config));

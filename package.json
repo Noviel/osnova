@@ -12,7 +12,7 @@
     "express-session": "^1.14.0",
     "mongoose": "^4.5.1",
     "object-assign": "^4.1.0",
-    "osnova-lib": "1.0.3",
+    "osnova-lib": "^1.1.4",
     "passport": "^0.3.2",
     "passport.socketio": "^3.6.2",
     "pug": "^2.0.0-beta3",
@@ -42,7 +42,8 @@
     "major-release": "npm --no-git-tag-version version major && npm publish",
     "minor-release": "npm --no-git-tag-version version minor && npm publish",
     "patch-release": "npm --no-git-tag-version version patch && npm publish",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "test": "npm run build && node __TEST__/test.js"
   },
-  "version": "0.21.1"
+  "version": "0.21.8"
 }

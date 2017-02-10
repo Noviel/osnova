@@ -8,20 +8,15 @@ exports.default = OSNOVA_DEFAULT;
 
 var _osnovaLib = require('osnova-lib');
 
-var _osnovaLib2 = _interopRequireDefault(_osnovaLib);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 // Created by snov on 29.06.2016.
 
 var path = require('path');
 var EventEmitter = require('events').EventEmitter;
 
-var _lib$core = _osnovaLib2.default.core,
-    isArray = _lib$core.isArray,
-    isFunction = _lib$core.isFunction,
-    isObject = _lib$core.isObject,
-    defaults = _lib$core.defaults;
+var isArray = _osnovaLib.core.isArray,
+    isFunction = _osnovaLib.core.isFunction,
+    isObject = _osnovaLib.core.isObject,
+    defaults = _osnovaLib.core.defaults;
 
 
 var consoleLinesBigSeparator = '----------------------------------------';
@@ -53,14 +48,12 @@ var addCoreModule = function addCoreModule(osnova, moduleName) {
   var usageOpts = osnova.opts.core.modules[moduleName];
   var isUsageObject = isObject(usageOpts);
 
-  if (usageOpts != true || isUsageObject && usageOpts.use != true) {
-    return;
+  if (isUsageObject && usageOpts.use == true || usageOpts == true) {
+    var modulePath = './modules/' + moduleName;
+    var opts = isUsageObject ? usageOpts.opts : null;
+
+    osnova.add(require(modulePath)(opts), moduleName);
   }
-
-  var modulePath = './modules/' + moduleName;
-  var opts = isUsageObject ? usageOpts.opts : null;
-
-  osnova.add(require(modulePath)(opts), moduleName);
 };
 
 var OSNOVA = function OSNOVA() {

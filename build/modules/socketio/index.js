@@ -12,6 +12,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var socket = function socket(opts) {
   return function (osnova) {
+    opts = opts || {};
     var authOpts = opts.auth ? {
       cookieParser: osnova.cookieParser,
       key: osnova.opts.core.session.key,

@@ -31,6 +31,7 @@ module.exports = exports = {
       }
     },
     session: true,
+    communicator: true,
     mongo: true
   }
 };

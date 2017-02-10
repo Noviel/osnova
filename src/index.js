@@ -3,14 +3,14 @@
 const path = require('path');
 const EventEmitter = require('events').EventEmitter;
 
-import lib from 'osnova-lib';
+import { core } from 'osnova-lib';
 
 const {
   isArray,
   isFunction,
   isObject,
   defaults
-} = lib.core;
+} = core;
 
 const consoleLinesBigSeparator = `----------------------------------------`;
 
@@ -42,14 +42,12 @@ const addCoreModule = (osnova, moduleName) => {
   const usageOpts = osnova.opts.core.modules[moduleName];
   const isUsageObject = isObject(usageOpts);
 
-  if (usageOpts != true || (isUsageObject && usageOpts.use != true)) {
-    return;
+  if ((isUsageObject && usageOpts.use == true) || usageOpts == true) {
+    const modulePath = './modules/' + moduleName;
+    const opts = isUsageObject ? usageOpts.opts : null;
+
+    osnova.add(require(modulePath)(opts), moduleName);
   }
-
-  const modulePath = './modules/' + moduleName;
-  const opts = isUsageObject ? usageOpts.opts : null;
-
-  osnova.add(require(modulePath)(opts), moduleName);
 };
 
 const OSNOVA = function(opts = {}) {
