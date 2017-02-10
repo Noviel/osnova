@@ -19,7 +19,7 @@ function connect(osnova) {
   return mongoose.connect(connectString).connection;
 }
 
-const mongo = osnova => {
+const mongo = opts => osnova => {
   let connection = connect(osnova);
 
   connection
@@ -35,3 +35,4 @@ const mongo = osnova => {
 };
 
 module.exports = mongo;
+export default mongo;

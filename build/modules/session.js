@@ -1,5 +1,8 @@
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 // Created by snov on 12.07.2016.
 
 var session = require('express-session');
@@ -41,3 +44,4 @@ var entry = function entry(opts) {
 };
 
 module.exports = entry;
+exports.default = entry;

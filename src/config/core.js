@@ -22,11 +22,15 @@ module.exports = exports = {
     secret: 'W09lWi11$HiN4'
   },
 
-  use: {
+  modules: {
     express: true,
-    socketio: true,
+    socketio: {
+      use: true,
+      opts: {
+        auth: false
+      }
+    },
     session: true,
-    mongo: true,
-    auth: true
+    mongo: true
   }
 };

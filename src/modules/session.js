@@ -34,3 +34,4 @@ const entry = opts => osnova => {
 };
 
 module.exports = entry;
+export default entry;

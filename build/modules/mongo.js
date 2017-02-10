@@ -1,5 +1,8 @@
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 // Created by snov on 11.10.2016.
 
 var mongoose = require('mongoose');
@@ -21,18 +24,21 @@ function connect(osnova) {
   return mongoose.connect(connectString).connection;
 }
 
-var mongo = function mongo(osnova) {
-  var connection = connect(osnova);
+var mongo = function mongo(opts) {
+  return function (osnova) {
+    var connection = connect(osnova);
 
-  connection.on('error', console.error.bind(console, 'connection error:')).on('disconnected', function () {
-    connection = connect(osnova);
-  }).once('open', function () {
-    console.log('Connected to MongoDB.');
-    if (isFirstTimeConnected) {
-      isFirstTimeConnected = false;
-      osnova.next({ connection: connection });
-    }
-  });
+    connection.on('error', console.error.bind(console, 'connection error:')).on('disconnected', function () {
+      connection = connect(osnova);
+    }).once('open', function () {
+      console.log('Connected to MongoDB.');
+      if (isFirstTimeConnected) {
+        isFirstTimeConnected = false;
+        osnova.next({ connection: connection });
+      }
+    });
+  };
 };
 
 module.exports = mongo;
+exports.default = mongo;

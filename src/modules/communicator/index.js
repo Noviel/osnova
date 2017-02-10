@@ -2,7 +2,7 @@
 
 import Communicator from './core';
 
-function communicator(osnova) {
+const communicator = opts => osnova => {
   const communicator = new Communicator({
     master: osnova.opts.master,
     port: 4778,
@@ -10,6 +10,7 @@ function communicator(osnova) {
     io: osnova.io || null
   });
   osnova.next({ communicator });
-}
+};
 
 module.exports = communicator;
+export default communicator;

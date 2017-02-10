@@ -49,21 +49,31 @@ var defaultListen = function defaultListen(opts) {
   };
 };
 
+var addCoreModule = function addCoreModule(osnova, moduleName) {
+  var usageOpts = osnova.opts.core.modules[moduleName];
+  var isUsageObject = isObject(usageOpts);
+
+  if (usageOpts != true || isUsageObject && usageOpts.use != true) {
+    return;
+  }
+
+  var modulePath = './modules/' + moduleName;
+  var opts = isUsageObject ? usageOpts.opts : null;
+
+  osnova.add(require(modulePath)(opts), moduleName);
+};
+
 var OSNOVA = function OSNOVA() {
   var opts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
   this.__version = require('../package.json').version;
 
-  opts.master = opts.master || false;
   opts.core = defaults(opts.core, require('./config/core'));
   opts.core.paths.absolute.assets = path.resolve(opts.core.paths.absolute.root, opts.core.paths.assets);
 
   this.opts = opts;
 
   if (opts.listen === 'default') {
-    if (opts.master) {
-      throw new Error('Default http listen can not be used on master! Specify extern listen function!');
-    }
     opts.listen = defaultListen(opts.core.target.host);
   }
 
@@ -85,30 +95,13 @@ var OSNOVA = function OSNOVA() {
   this.ee.on('ALL_MODULES_READY', this.onAllModulesReady.bind(this));
 
   // process built-in core modules
+  addCoreModule(osnova, 'mongo');
+  addCoreModule(osnova, 'express');
+  addCoreModule(osnova, 'session');
+  addCoreModule(osnova, 'socketio');
+  addCoreModule(osnova, 'communicator');
 
-  var usage = opts.core.use;
-
-  if (usage.mongo) {
-    this.add(require('./modules/mongo'), 'mongo');
-  }
-
-  if (opts.master) {} else {
-
-    if (usage.express) {
-      this.add(require('./modules/express')({}), 'express');
-    }
-
-    if (usage.session) {
-      this.add(require('./modules/session')({}), 'session');
-    }
-
-    if (usage.socketio) {
-      this.add(require('./modules/socket')({ auth: usage.auth }), 'socket');
-    }
-  }
-
-  this.add(require('./modules/communicator'));
-
+  // process modules from options
   var modules = opts.modules;
 
   if (isArray(modules)) {
@@ -160,6 +153,8 @@ OSNOVA.prototype.onAllModulesReady = function () {
 
   if (isFunction(this.listen)) {
     this.listen(this.http);
+  } else {
+    console.log('No listen function was specified. Are you sure that\'s everything all right?');
   }
 };
 
