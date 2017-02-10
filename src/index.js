@@ -82,11 +82,11 @@ const OSNOVA = function(opts = {}) {
   this.ee.on('ALL_MODULES_READY', this.onAllModulesReady.bind(this));
 
   // process built-in core modules
-  addCoreModule(osnova, 'mongo');
-  addCoreModule(osnova, 'express');
-  addCoreModule(osnova, 'session');
-  addCoreModule(osnova, 'socketio');
-  addCoreModule(osnova, 'communicator');
+  addCoreModule(this, 'mongo');
+  addCoreModule(this, 'express');
+  addCoreModule(this, 'session');
+  addCoreModule(this, 'socketio');
+  addCoreModule(this, 'communicator');
 
   // process modules from options
   const modules = opts.modules;
