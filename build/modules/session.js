@@ -8,7 +8,8 @@ Object.defineProperty(exports, "__esModule", {
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 
-var defaults = require('osnova-lib').core.defaults;
+var _require = require('osnova-lib'),
+    defaults = _require.defaults;
 
 var defConfig = function defConfig(osnova) {
   var _osnova$opts$core$ses = osnova.opts.core.session,

@@ -3,7 +3,7 @@
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 
-const { defaults }  = require('osnova-lib').core;
+const { defaults }  = require('osnova-lib');
 
 const defConfig = (osnova) => {
   const { secret, key } = osnova.opts.core.session;

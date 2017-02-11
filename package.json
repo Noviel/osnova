@@ -12,7 +12,7 @@
     "express-session": "^1.14.0",
     "mongoose": "^4.5.1",
     "object-assign": "^4.1.0",
-    "osnova-lib": "^1.1.4",
+    "osnova-lib": "^2.0.2",
     "passport": "^0.3.2",
     "passport.socketio": "^3.6.2",
     "pug": "^2.0.0-beta3",
@@ -45,5 +45,5 @@
     "prepublish": "npm run build",
     "test": "npm run build && node __TEST__/test.js"
   },
-  "version": "0.23.0"
+  "version": "0.23.1"
 }

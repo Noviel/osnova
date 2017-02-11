@@ -3,14 +3,12 @@
 const path = require('path');
 const EventEmitter = require('events').EventEmitter;
 
-import { core } from 'osnova-lib';
-
-const {
+import {
   isArray,
   isFunction,
   isObject,
   defaults
-} = core;
+} from 'osnova-lib';
 
 const consoleLinesBigSeparator = `----------------------------------------`;
 

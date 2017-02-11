@@ -1237,6 +1237,10 @@ cliui@^2.1.0:
     right-align "^0.1.1"
     wordwrap "0.0.2"
 
+clone@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/clone/-/clone-2.1.0.tgz#9c715bfbd39aa197c8ee0f8e65c3912ba34f8cd6"
+
 code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
@@ -2264,9 +2268,11 @@ os-tmpdir@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/os-tmpdir/-/os-tmpdir-1.0.2.tgz#bbe67406c79aa85c5cfec766fe5734555dfa1274"
 
-osnova-lib@^1.1.4:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/osnova-lib/-/osnova-lib-1.1.4.tgz#fa0b966cf247bbdc9b39b4e4d62daa73d71f8ad8"
+osnova-lib@2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/osnova-lib/-/osnova-lib-2.0.2.tgz#105c2bdad32beb50bcd1800acb26928e87e41cb0"
+  dependencies:
+    clone "^2.1.0"
 
 output-file-sync@^1.1.0:
   version "1.1.2"

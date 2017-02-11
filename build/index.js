@@ -13,12 +13,6 @@ var _osnovaLib = require('osnova-lib');
 var path = require('path');
 var EventEmitter = require('events').EventEmitter;
 
-var isArray = _osnovaLib.core.isArray,
-    isFunction = _osnovaLib.core.isFunction,
-    isObject = _osnovaLib.core.isObject,
-    defaults = _osnovaLib.core.defaults;
-
-
 var consoleLinesBigSeparator = '----------------------------------------';
 
 var getHelloLines = function getHelloLines(name, version) {
@@ -46,7 +40,7 @@ var defaultListen = function defaultListen(opts) {
 
 var addCoreModule = function addCoreModule(osnova, moduleName) {
   var usageOpts = osnova.opts.core.modules[moduleName];
-  var isUsageObject = isObject(usageOpts);
+  var isUsageObject = (0, _osnovaLib.isObject)(usageOpts);
 
   if (isUsageObject && usageOpts.use == true || usageOpts == true) {
     var modulePath = './modules/' + moduleName;
@@ -61,7 +55,7 @@ var OSNOVA = function OSNOVA() {
 
   this.__version = require('../package.json').version;
 
-  opts.core = defaults(opts.core, require('./config/core'));
+  opts.core = (0, _osnovaLib.defaults)(opts.core, require('./config/core'));
   opts.core.paths.absolute.assets = path.resolve(opts.core.paths.absolute.root, opts.core.paths.assets);
 
   this.opts = opts;
@@ -97,7 +91,7 @@ var OSNOVA = function OSNOVA() {
   // process modules from options
   var modules = opts.modules;
 
-  if (isArray(modules)) {
+  if ((0, _osnovaLib.isArray)(modules)) {
     for (var i = 0; i < modules.length; i++) {
       this.add(modules[i]);
     }
@@ -113,12 +107,12 @@ OSNOVA.prototype.constructor = OSNOVA;
 // and set new module is current
 // so we have single linked list of modules in order of they were added
 OSNOVA.prototype.add = function (module, name) {
-  if (isFunction(module)) {
+  if ((0, _osnovaLib.isFunction)(module)) {
     module = {
       fn: module,
       name: name || 'm' + this.moduleLastIndex++
     };
-  } else if (isObject(module) && isFunction(module.fn)) {
+  } else if ((0, _osnovaLib.isObject)(module) && (0, _osnovaLib.isFunction)(module.fn)) {
     if (!module.name) {
       module.name = name || 'm' + this.moduleLastIndex;
     }
@@ -144,7 +138,7 @@ OSNOVA.prototype.add = function (module, name) {
 OSNOVA.prototype.onAllModulesReady = function () {
   console.log('All modules are ready. Booting...');
 
-  if (isFunction(this.listen)) {
+  if ((0, _osnovaLib.isFunction)(this.listen)) {
     this.listen(this.http);
   } else {
     console.log('No listen function was specified. Are you sure that\'s everything all right?');
@@ -212,7 +206,7 @@ OSNOVA.prototype.start = function (callback) {
 
   printHello('OSNOVA', this.__version);
 
-  if (isFunction(callback)) {
+  if ((0, _osnovaLib.isFunction)(callback)) {
     this.add(function (osnova) {
       callback(osnova);
       _this.next();

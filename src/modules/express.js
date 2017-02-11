@@ -9,7 +9,7 @@ const bodyParser = require('body-parser');
 const compression = require('compression');
 
 const out = opts => osnova => {
-  const express  = Express();
+  const express = Express();
   const http = Http.Server(express);
   const { assets: assetsPath } = osnova.opts.core.paths.absolute;
 
