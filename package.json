@@ -1,5 +1,19 @@
 {
-  "author": "Aleksandr snov Noviel <snov.contact@gmail.com>",
+  "name": "osnova",
+  "author": "Aleksandr Snov <snov.contact@gmail.com>",
+  "description": "Modular node.js server",
+  "keywords": [
+    "modular",
+    "server",
+    "node"
+  ],
+  "license": "MIT",
+  "main": "build/index.js",
+  "readme": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Noviel/osnova.git"
+  },
   "dependencies": {
     "axon": "^2.0.2",
     "bcryptjs": "^2.3.0",
@@ -18,7 +32,6 @@
     "pug": "^2.0.0-beta3",
     "socket.io": "^1.7.2"
   },
-  "description": "Modular node.js server",
   "devDependencies": {
     "babel-cli": "^6.10.1",
     "babel-core": "^6.9.1",
@@ -27,15 +40,6 @@
     "babel-preset-es2017": "^6.14.0",
     "babel-preset-latest": "6.22"
   },
-  "license": "MIT",
-  "main": "build/index.js",
-  "maintainers": [
-    {
-      "name": "sonsnov",
-      "email": "snov.contact@gmail.com"
-    }
-  ],
-  "name": "osnova",
   "optionalDependencies": {},
   "scripts": {
     "build": "babel src -d build",
@@ -45,5 +49,5 @@
     "prepublish": "npm run build",
     "test": "npm run build && node __TEST__/test.js"
   },
-  "version": "0.23.1"
+  "version": "0.23.2"
 }
