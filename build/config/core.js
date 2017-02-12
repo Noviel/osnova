@@ -28,7 +28,10 @@ module.exports = exports = {
   },
 
   modules: {
-    express: true,
+    express: {
+      use: true,
+      compression: true
+    },
     socketio: {
       use: true,
       opts: {

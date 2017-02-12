@@ -7,6 +7,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var Http = require('http');
 var Express = require('express');
+var compression = require('compression');
 
 var out = function out(opts) {
   return function (osnova) {
@@ -16,6 +17,10 @@ var out = function out(opts) {
     var http = Http.Server(express);
     var assetsPath = osnova.opts.core.paths.absolute.assets;
 
+
+    if (opts.compression) {
+      express.use(compression());
+    }
 
     express.use(Express.static(assetsPath));
 
