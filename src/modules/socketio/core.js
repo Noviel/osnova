@@ -11,6 +11,7 @@ export default class Socket {
 
     const io = IO(server);
 
+    /*
     if (authOpts) {
       const passportSocketIo = require('passport.socketio');
 
@@ -36,7 +37,7 @@ export default class Socket {
         if (error)
           accept(new Error(message));
       }
-    }
+    }*/
 
     this.io = io;
 

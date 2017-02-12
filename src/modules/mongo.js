@@ -23,7 +23,7 @@ const mongo = opts => osnova => {
   let connection = connect(osnova);
 
   connection
-    .on('error', console.error.bind(console, 'connection error:'))
+    .on('error', () => { console.error(`Cant connect to ${osnova.opts.core.database.uri}.`); })
     .on('disconnected', () => { connection = connect(osnova); })
     .once('open', () => {
       console.log('Connected to MongoDB.');

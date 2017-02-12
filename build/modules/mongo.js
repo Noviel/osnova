@@ -28,7 +28,9 @@ var mongo = function mongo(opts) {
   return function (osnova) {
     var connection = connect(osnova);
 
-    connection.on('error', console.error.bind(console, 'connection error:')).on('disconnected', function () {
+    connection.on('error', function () {
+      console.error('Cant connect to ' + osnova.opts.core.database.uri + '.');
+    }).on('disconnected', function () {
       connection = connect(osnova);
     }).once('open', function () {
       console.log('Connected to MongoDB.');

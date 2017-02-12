@@ -8,8 +8,8 @@ const { defaults }  = require('osnova-lib');
 const defConfig = (osnova) => {
   const { secret, key } = osnova.opts.core.session;
   return {
-    resave: false,
-    saveUninitialized: false,
+    resave: true,
+    saveUninitialized: true,
     secret,
     key
   };
@@ -30,7 +30,6 @@ const entry = opts => osnova => {
   config.store = config.store || new MongoStore({ mongooseConnection: config.connection || osnova.connection });
 
   app.use(session(config));
-
   osnova.next({ sessionStore: config.store });
 };
 

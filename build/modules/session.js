@@ -17,8 +17,8 @@ var defConfig = function defConfig(osnova) {
       key = _osnova$opts$core$ses.key;
 
   return {
-    resave: false,
-    saveUninitialized: false,
+    resave: true,
+    saveUninitialized: true,
     secret: secret,
     key: key
   };
@@ -40,7 +40,6 @@ var entry = function entry(opts) {
     config.store = config.store || new MongoStore({ mongooseConnection: config.connection || osnova.connection });
 
     app.use(session(config));
-
     osnova.next({ sessionStore: config.store });
   };
 };

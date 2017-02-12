@@ -22,30 +22,29 @@ var Socket = function () {
 
     var io = IO(server);
 
+    /*
     if (authOpts) {
-      var onAuthorizeSuccess = function onAuthorizeSuccess(data, accept) {
-        console.log('socket autorized.');
-        accept();
-      };
-
-      var onAuthorizeFail = function onAuthorizeFail(data, message, error, accept) {
-        if (error) throw new Error(message);
-        console.log('failed connection to socket.io:', message);
-
-        if (error) accept(new Error(message));
-      };
-
-      var passportSocketIo = require('passport.socketio');
-
-      io.use(passportSocketIo.authorize({
+      const passportSocketIo = require('passport.socketio');
+        io.use(passportSocketIo.authorize({
         cookieParser: authOpts.cookieParser,
         key: authOpts.key,
         secret: authOpts.secret,
         store: authOpts.sessionStore,
         success: onAuthorizeSuccess,
-        fail: onAuthorizeFail
+        fail: onAuthorizeFail,
       }));
-    }
+        function onAuthorizeSuccess(data, accept) {
+        console.log('socket autorized.');
+        accept();
+      }
+        function onAuthorizeFail(data, message, error, accept) {
+        if (error)
+          throw new Error(message);
+        console.log('failed connection to socket.io:', message);
+          if (error)
+          accept(new Error(message));
+      }
+    }*/
 
     this.io = io;
 
