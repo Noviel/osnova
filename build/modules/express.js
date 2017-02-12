@@ -18,7 +18,7 @@ var out = function out(opts) {
     var assetsPath = osnova.opts.core.paths.absolute.assets;
 
 
-    if (opts.compression) {
+    if (opts.compression != false) {
       express.use(compression());
     }
 

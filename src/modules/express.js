@@ -11,7 +11,7 @@ const out = opts => osnova => {
   const http = Http.Server(express);
   const { assets: assetsPath } = osnova.opts.core.paths.absolute;
 
-  if (opts.compression) {
+  if (opts.compression != false) {
     express.use(compression());
   }
 
