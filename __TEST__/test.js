@@ -8,22 +8,6 @@
 const osnova = require('../build/index.js');
 const { defaults }  = require('osnova-lib');
 
-/*
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
-const compression = require('compression');
-
-const configExpressModule = opts => osnova => {
-  const express = osnova.express;
-
-  express.use(compression());
-  express.use(bodyParser.json());
-  express.use(bodyParser.urlencoded({ extended: false }));
-  express.use(cookieParser());
-
-  osnova.next();
-};*/
-
 const server = osnova.Server({
   core: {
     modules: {

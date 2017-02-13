@@ -1,7 +1,7 @@
 {
   "name": "osnova",
   "description": "Modular node.js server",
-  "version": "0.25.1",
+  "version": "0.26.0",
   "keywords": [
     "modular",
     "server",
@@ -31,6 +31,7 @@
   "devDependencies": {
     "babel-cli": "^6.10.1",
     "babel-core": "^6.9.1",
+    "babel-plugin-transform-object-rest-spread": "^6.22.0",
     "babel-preset-es2015": "^6.14.0",
     "babel-preset-es2016": "^6.11.3",
     "babel-preset-es2017": "^6.14.0",
