@@ -27,7 +27,8 @@ osnova.start((osnova) => {
     
 ### Modules
 
-OSNOVA is modular by its nature. Modules are just functions, that will be called on start.
+OSNOVA is modular by its nature. Modules are just functions, that will be called on start. 
+Every module added to OSNOVA will be called with `osnova` as an argument.
 
 The very basic module:
  ```javascript
@@ -35,7 +36,7 @@ The very basic module:
    let count = initialCount;
  
    osnova.next({ 
-     myUsefullCounter: {
+     counter: {
        value() { return count; },
        increment() { count++; },
        decrement() { count--; }
@@ -43,9 +44,10 @@ The very basic module:
    })    
  }
  ```
-`osnova.next({ export })` assigns `export` object to `osnova`. 
+`osnova.next({ export })` assigns `export` object to `osnova`. So `myUsefullCounter` will be available 
+as `osnova.counter` for other modules.
 Important moment here - `next()` is not just making available some functionality from outside. 
-It also an indicator that module has done his business and OSNOVA should execute next one in the queue.
+It is also an indicator that module has done his business and OSNOVA should execute next one in the queue.
 Every module **MUST CALL** `osnova.next()` even if it is not exporting anything. 
 By this mechanism modules will guaranteed to be executed in an order they were added and any next module 
 gain access to previous module's exports:
@@ -69,10 +71,9 @@ osnova.start((osnova) => {
   console.log(`Hello from OSNOVA v${osnova.getVersion()}. Count = ${counter.value()}`);
 });
 ```
+
 ### Core modules
-Without any extern modules is provides only `express`, `http` and `mongo` components.
-Any component can be accessed from callbacks that will be called with `osnova` 
-as an argument.
+Without any extern modules OSNOVA provides only `express`, `http` and `mongo` components.
     
 #### Express
 
