@@ -49,8 +49,9 @@ as `osnova.counter` for other modules.
 Important moment here - `next()` is not just making available some functionality from outside. 
 It is also an indicator that module has done his business and OSNOVA should execute next one in the queue.
 Every module **MUST CALL** `osnova.next()` even if it is not exporting anything. 
-By this mechanism modules will guaranteed to be executed in an order they were added and any next module 
-gain access to previous module's exports:
+By this mechanism modules will guaranteed to be executed in an 
+order they were added and any next module 
+gain access to exports of all previous modules:
 
 ```javascript
 const osnova = OSNOVA({
