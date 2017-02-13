@@ -3,7 +3,6 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Server = undefined;
 exports.default = OSNOVA_DEFAULT;
 
 var _osnovaLib = require('osnova-lib');
@@ -60,7 +59,7 @@ var OSNOVA = function OSNOVA() {
 
   this.opts = opts;
 
-  if (opts.listen === 'default') {
+  if (opts.listen == 'default' || typeof opts.listen == 'undefined') {
     opts.listen = defaultListen(opts.core.host);
   }
 
@@ -215,8 +214,10 @@ OSNOVA.prototype.start = function (callback) {
   this.loadModules();
 };
 
+OSNOVA.prototype.getVersion = function () {
+  return this.__version;
+};
+
 function OSNOVA_DEFAULT(opts) {
   return new OSNOVA(opts);
 }
-
-var Server = exports.Server = OSNOVA_DEFAULT;

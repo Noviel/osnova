@@ -56,7 +56,7 @@ const OSNOVA = function(opts = {}) {
 
   this.opts = opts;
 
-  if (opts.listen === 'default') {
+  if (opts.listen == 'default' || typeof opts.listen == 'undefined') {
     opts.listen = defaultListen(opts.core.host);
   }
 
@@ -209,8 +209,10 @@ OSNOVA.prototype.start = function (callback) {
   this.loadModules();
 };
 
+OSNOVA.prototype.getVersion = function () {
+  return this.__version;
+};
+
 export default function OSNOVA_DEFAULT(opts) {
   return new OSNOVA(opts);
 }
-
-export const Server = OSNOVA_DEFAULT;

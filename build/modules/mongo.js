@@ -36,7 +36,11 @@ var mongo = function mongo(opts) {
       console.log('Connected to MongoDB.');
       if (isFirstTimeConnected) {
         isFirstTimeConnected = false;
-        osnova.next({ connection: connection });
+        osnova.next({
+          mongo: {
+            connection: connection
+          }
+        });
       }
     });
   };

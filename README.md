@@ -1,155 +1,123 @@
-**OSNOVA**
+# OSNOVA
 
-Modular Node.js server.
+## bI?
 
-Includes:
-- Express
-- Socket.IO
-- Mongoose
+Modular Node.js server based on express and mongoose.
 
-Wow such ready-to-go much time to watch anime!
+## Install
 
-##Install
-
-via npm: 
-
-    npm i osnova [--save] 
+npm: 
+```sh
+npm i osnova [--save] 
+```
+or yarn:
+```sh
+yarn add osnova
+```   
     
-via yarn:
+## Usage
+```javascript
+const OSNOVA = require('osnova');
+const osnova = OSNOVA();
 
-    yarn add osnova
-   
+osnova.start((osnova) => {
+  console.log(`Hello from OSNOVA v${osnova.getVersion()}`);
+});
+```
     
-###Usage
-    
-    const OSNOVA = require('osnova');
-    const server = OSNOVA.Server({
-      listen: 'default'
-    });
-    
-    server.start((osnova) => {
-      console.log('hello');
-    });
-        
-    
-####Accessing the components
+### Modules
 
-Any component of OSNOVA can be accessed from `osnova` object, which is returned by `OSNOVA.Server(opts)`.
+OSNOVA is modular by its nature. Modules are just functions, that will be called on start.
 
-- Functions `init` and `start` from `opts` of `OSNOVA.Server(opts)` 
-will be called with `osnova` object as a parameter when their time comes.
-    
-        const workerOpts = {
-            start: (osnova) => {
-                allComponentsAreInitializedLetsRock(osnova);
-            }
-        }
-        const osnovaWorker = OSNOVA.Server(workerOpts);
-
-Options (including `start` and `init` functions) are passed to configurator, when `OSNOVA.Server()` is called. 
-But core modules will be created later, after `osnova.start()` called. Because of it you **can't** write something like this:
-
-    const osnova = OSNOVA.Server(opts);
-    const app = osnova.express;
-    app.get('/myroute', (req, res) => { res.send('hello') });
-
-`app` will be undefined. All logic based on `osnova` components should be called from inside `start`/`init` functions. 
-
- - The other way access to `osnova` components is [OsnovaModule](#osnovamodule).
-    
-There is no other way to get any `osnova` component safely.
-
-##API 
-###OSNOVA
-`OSNOVA = require('osnova');`
-####.Server(opts)
-**@in** `opts` - options object  
-**@return** `OsnovaServer` - public OSNOVA server interface  
-Starts OSNOVA server on the master or on a worker.
-This is a default import and available via:
-
-    import OSNOVA from 'osnova'
-    const osnovaServer = OSNOVA({/* opts */});
-    
-**!** - option required to be explicitly defined on both.  
-**W!** - required for worker.  
-**M!** - required for master.
-
-- **opts.master** [true/false]: 
-Default: false. Flag. Is current instance of osnova will be launched in master thread.
-- **opts.core** [object]:
-- **opts.core.paths** [object]:
-- `!`**opts.core.paths.root** [string]: Absolute project root path. MUST be defined! Used in Express and in low-level configurator.
-- **opts.core.paths.public** [string]: Relative path from project root to public web-server folder. `Default: './public'`
-- **opts.core.paths.views** [string]: Relative path from project root to template-views folder. `Default './private/views'`
-- **opts.core.template** [string]: Template engine. Default: 'pug'.
-- **opts.core.target** [object]: Target configuration.
-- **opts.core.target.database** [object]:
-- `!`**opts.core.target.database.uri** [string]: MongoDB connection URI. 
-- `!`**opts.core.target.database.path** [string]: MongoDB connection URL. Will be used if no `uri` specified.
-- `!`**opts.core.target.database.name** [string]: MongoDB database name. Will be used if no `uri` specified.
-
-####.launch(opts)
-**@in** `opts` - options object  
-**@return** -  
-
-Entry point of multithreaded application. It takes config, master and worker functions and launch its in master and workers threads respectively.
-
-- `!`**opts.worker** [function]: Worker function.
-- `!`**opts.master** [function]: Master function.
-- **opts.config** [object]:
-- **opts.config.threads** [integer]: Number of worker-threads to be spawned. Default: 1.
-- **opts.config.host** [object]:
-- **opts.config.host.ip** [string]: Server IP of the application. Default: 'localhost'.
-- **opts.config.host.port** [integer]: Web-server port of the application. Default: '8080'.
-
-####.Module(name, fn)
-
- - `!`**@in** `name` [string]: Unique module name. 
- - `!`**@in** `fn` [function(osnova object)]: Module entry point.
- - **@return** `OsnovaModule`.  
+The very basic module:
+ ```javascript
+ const myUsefullCounterModule = ({ initialCount } = { initialCount: 0 }) => osnova => {
+   let count = initialCount;
  
-###OsnovaServer
+   osnova.next({ 
+     myUsefullCounter: {
+       value() { return count; },
+       increment() { count++; },
+       decrement() { count--; }
+     }
+   })    
+ }
+ ```
+`osnova.next({ export })` assigns `export` object to `osnova`. 
+Important moment here - `next()` is not just making available some functionality from outside. 
+It also an indicator that module has done his business and OSNOVA should execute next one in the queue.
+Every module **MUST CALL** `osnova.next()` even if it is not exporting anything. 
+By this mechanism modules will guaranteed to be executed in an order they were added and any next module 
+gain access to previous module's exports:
 
-Returned by `OSNOVA.Server()` and provides main interface to OSNOVA.
+```javascript
+const osnova = OSNOVA({
+  modules: [ 
+    myUsefullCounterModule(100), 
+    moduleWithoutOptions, 
+    iCanCallPreviousModulesSafely
+  ]
+});
+```
+`osnova.start` takes the module as an argument. It will be added in queue as the last one.
+And then module queue will be executed. So module added by `start` can safely use any other module.
 
-####.add(module, [name])
-**@in** `module` [OsnovaModule object/function]  
-**@in[opt]** `name` [string]: Optional name of the module.  
-**@return** -  
-Adds custom module to OSNOVA. Should be called after `osnova = OSNOVA.Server()` and before `osnova.start()`.
+```javascript
+osnova.start((osnova) => {
+  const counter = osnova.myUsefullCounter;
+  counter.increment();
+  console.log(`Hello from OSNOVA v${osnova.getVersion()}. Count = ${counter.value()}`);
+});
+```
+### Core modules
+Without any extern modules is provides only `express`, `http` and `mongo` components.
+Any component can be accessed from callbacks that will be called with `osnova` 
+as an argument.
     
-See [OsnovaModule](#osnovamoduledesc) for details.
+#### Express
 
-####.start()
-**@in** `callback` [function(osnova)]  
-**@return** -  
-Starts the server and execute callback with osnova as a parameter. Any code in flow after this function will never be executed.
+Exports `express`, `http`.
 
-###OsnovaModule
+#### Mongo
 
-Returned by [OSNOVA.Module(fn, [name])](#moduledesc)
+Exports `mongo` with properties:
+- **connection**: current connection to MongoDB.
+
+### Options
+- **listen** { function } will be called with `osnova.http` as an argument 
+when all modules are ready. if `undefined` of `'default'` 
+will be used built-in standard listen.
+
+### Samples
  
-Module can be created by `new OSNOVA.Module()` or simply by adding the function to osnova.
-    
-    const myModule = (osnova) => {
-        setTimeout(() => {
-            osnova.moduleReady();
-        }, 1000);
-    }
-    osnovaMaster.add(myModule, 'MyModule');
-        
-OSNOVA module system is based on the execution queue. Modules are guaranteed to be invoked 
-in the sequence in which were added. Even if they are doing async job inside themselves. 
-This is achieved by function `osnova.moduleReady()` that **MUST** be called, when module is ready.
-It tells to module system that the module (where it is called from) finished the job 
-and the next module can be called. So you can safely add modules, that doing some async work.
-They are guaranteed to do all they need before next module will start. 
-If this function is not called - the system will never 
-know that the module has done his job, and never will start operating next module in the queue.
+#### Add routes
+You **can't** do this: 
 
+```javascript
+const osnova = OSNOVA(opts);
 
-###Samples
+const express = osnova.express; // app - undefined
+express.get('/myroute', (req, res) => { res.send('hello') });
 
-[Very basic sample application](https://github.com/Noviel/osnova-basic-application)
+osnova.start();
+```
 
+The right way is to call routing from `start` callback or create a module:
+
+```javascript
+
+const myRouting = osnova => {
+  const express = osnova.express;
+  express.get('/route1', (req, res) => { res.send('hello from route1') });
+  express.get('/route2', (req, res) => { res.send('hello from route2') });
+  osnova.next();
+}
+
+const osnova = OSNOVA({
+  modules: [ myRouting ],
+  listen: 'default'
+});
+
+osnova.start();
+
+```

@@ -24,23 +24,32 @@ var defConfig = function defConfig(osnova) {
   };
 };
 
-// opts.express [?] - external express app apply session to.
-// opts.store [?]
-// opts.connection [?]
-var entry = function entry(opts) {
+var entry = function entry() {
+  var opts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   return function (osnova) {
-    opts = opts || {};
-    var app = osnova.express || opts.express;
+
+    var app = opts.express || osnova.express;
+    var connection = opts.connection || osnova.mongo ? osnova.mongo.connection : null;
 
     if (!app) {
-      throw new Error('Express is not defined. Turn on express module in osnova or specify it in options.');
+      throw new Error('Express is not defined. Turn on express module in osnova or specify express in options.');
+    }
+    if (!connection) {
+      throw new Error('Connection is required. Turn on mongo module is osnova or specify connection in options.');
     }
 
     var config = defaults(opts, defConfig(osnova));
-    config.store = config.store || new MongoStore({ mongooseConnection: config.connection || osnova.connection });
+    config.store = config.store || new MongoStore({ mongooseConnection: connection });
 
     app.use(session(config));
-    osnova.next({ sessionStore: config.store });
+
+    osnova.next({
+      session: {
+        store: config.store,
+        key: config.key,
+        secret: config.secret
+      }
+    });
   };
 };
 
