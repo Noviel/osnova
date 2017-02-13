@@ -27,7 +27,7 @@ var defConfig = function defConfig(osnova) {
 var entry = function entry() {
   var opts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   return function (osnova) {
-
+    console.log(opts);
     var app = opts.express || osnova.express;
     var connection = opts.connection || osnova.mongo ? osnova.mongo.connection : null;
 

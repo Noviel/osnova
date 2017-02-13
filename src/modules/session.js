@@ -16,7 +16,7 @@ const defConfig = (osnova) => {
 };
 
 const entry = (opts = {}) => osnova => {
-
+  console.log(opts);
   const app = opts.express || osnova.express;
   const connection = opts.connection || osnova.mongo ? osnova.mongo.connection : null;
 

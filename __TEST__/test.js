@@ -8,13 +8,9 @@
 const osnova = require('../build/index.js');
 const { defaults }  = require('osnova-lib');
 
-const server = osnova.Server({
+const server = osnova({
   core: {
     modules: {
-      session: {
-        use: true,
-        opts: { key: 'sid.osnovatest' }
-      }
     },
     database: { uri: 'mongodb://localhost/osnovatest'},
     host: { ip: 'localhost', port: 4444 },

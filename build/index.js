@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = OSNOVA_DEFAULT;
+exports.default = OSNOVA_EXPORT;
 
 var _osnovaLib = require('osnova-lib');
 
@@ -43,7 +43,7 @@ var addCoreModule = function addCoreModule(osnova, moduleName) {
 
   if (isUsageObject && usageOpts.use == true || usageOpts == true) {
     var modulePath = './modules/' + moduleName;
-    var opts = isUsageObject ? usageOpts.opts : null;
+    var opts = isUsageObject ? usageOpts.opts : undefined;
 
     osnova.add(require(modulePath)(opts), moduleName);
   }
@@ -218,6 +218,8 @@ OSNOVA.prototype.getVersion = function () {
   return this.__version;
 };
 
-function OSNOVA_DEFAULT(opts) {
+function OSNOVA_EXPORT(opts) {
   return new OSNOVA(opts);
 }
+
+module.exports = OSNOVA_EXPORT;

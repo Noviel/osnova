@@ -42,7 +42,7 @@ const addCoreModule = (osnova, moduleName) => {
 
   if ((isUsageObject && usageOpts.use == true) || usageOpts == true) {
     const modulePath = './modules/' + moduleName;
-    const opts = isUsageObject ? usageOpts.opts : null;
+    const opts = isUsageObject ? usageOpts.opts : undefined;
 
     osnova.add(require(modulePath)(opts), moduleName);
   }
@@ -213,6 +213,8 @@ OSNOVA.prototype.getVersion = function () {
   return this.__version;
 };
 
-export default function OSNOVA_DEFAULT(opts) {
+export default function OSNOVA_EXPORT(opts) {
   return new OSNOVA(opts);
 }
+
+module.exports = OSNOVA_EXPORT;
