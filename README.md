@@ -53,7 +53,7 @@ gain access to previous module's exports:
 ```javascript
 const osnova = OSNOVA({
   modules: [ 
-    myUsefullCounterModule(100), 
+    myUsefullCounterModule({ initialCount: 100 }), 
     moduleWithoutOptions, 
     iCanCallPreviousModulesSafely
   ]
