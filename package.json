@@ -1,7 +1,7 @@
 {
   "name": "osnova",
   "description": "Modular node.js server",
-  "version": "0.26.0",
+  "version": "0.26.1",
   "keywords": [
     "modular",
     "server",
