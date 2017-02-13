@@ -54,11 +54,15 @@ const OSNOVA = function(opts = {}) {
   opts.core = defaults(opts.core, require('./config/core'));
   opts.core.paths.absolute.assets = path.resolve(opts.core.paths.absolute.root, opts.core.paths.assets);
 
-  this.opts = opts;
-
   if (opts.listen == 'default' || typeof opts.listen == 'undefined') {
     opts.listen = defaultListen(opts.core.host);
   }
+
+  if (typeof opts.DEBUG == 'undefined') {
+    opts.DEBUG = {};
+  }
+
+  this.opts = opts;
 
   this.listen = opts.listen;
 
@@ -112,12 +116,12 @@ OSNOVA.prototype.add = function(module, name) {
       module.name = name || 'm' + this.moduleLastIndex;
     }
   } else {
-    console.log(`Error: wrong module format ${module}`);
+    console.log(`Warning: Wrong module format ${module}. Skipping.`);
     return;
   }
 
   if (this.moduleQueue[module.name]) {
-    console.log(`Warning: module with name [${module.name}] already present in modules' queue. Overriding.`);
+    console.log(`Warning: module with name [${module.name}] already exists in modules' queue. Overriding.`);
   }
 
   this.moduleQueue[module.name] = module;
@@ -131,7 +135,7 @@ OSNOVA.prototype.add = function(module, name) {
 };
 
 OSNOVA.prototype.onAllModulesReady = function() {
-  console.log(`All modules are ready. Booting...`);
+  console.log(`All modules are executed. Ready to listen.`);
 
   if (isFunction(this.listen)) {
     this.listen(this.http);
@@ -141,7 +145,9 @@ OSNOVA.prototype.onAllModulesReady = function() {
 };
 
 function executeModule(osnova, module) {
-  console.log(`Executing module ${module.name}`);
+  if (osnova.opts.DEBUG.modules) {
+    console.log(`Executing module ${module.name}`);
+  }
   module.fn(osnova);
 }
 
@@ -151,7 +157,9 @@ OSNOVA.prototype.onModuleReady = function (result) {
 
   if (!module) return;
 
-  console.log(`Module ${module.name} is ready`);
+  if (this.opts.DEBUG.modules) {
+    console.log(`Module ${module.name} is ready`);
+  }
 
   // copy result of module work to OSNOVA
   if (result !== undefined && result !== null) {

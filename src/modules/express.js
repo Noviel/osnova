@@ -17,7 +17,7 @@ const out = opts => osnova => {
 
   express.use(Express.static(assetsPath));
 
-  if (!opts.middlewares) opts.middlewares = {};
+  opts.middlewares = opts.middlewares || {};
 
   Object.keys(opts.middlewares).forEach((m) => {
     const middleware = opts.middlewares[m];
