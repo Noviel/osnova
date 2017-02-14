@@ -85,7 +85,6 @@ const OSNOVA = function(opts = {}) {
   addCoreModule(this, 'mongo');
   addCoreModule(this, 'webserver');
   addCoreModule(this, 'session');
-  addCoreModule(this, 'communicator');
 
   // process modules from options
   const modules = opts.modules;

@@ -30,7 +30,6 @@ module.exports = exports = {
       compression: true
     },
     session: true,
-    communicator: true,
     mongo: true
   }
 };
