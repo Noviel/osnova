@@ -204,14 +204,18 @@ OSNOVA.prototype.loadModules = function () {
 };
 
 // Entry point of the server.
-OSNOVA.prototype.start = function (callback) {
+OSNOVA.prototype.start = function (callback, isCallbackModule = false) {
   printHello('OSNOVA', this.__version);
 
   if (isFunction(callback)) {
-    this.add((osnova) => {
-      callback(osnova);
-      this.next();
-    });
+    if (isCallbackModule) {
+      this.add(callback, 'start');
+    } else {
+      this.add(osnova => {
+        callback(osnova);
+        this.next();
+      }, 'start');
+    }
   }
 
   this.loadModules();

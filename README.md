@@ -91,7 +91,6 @@ Takes Options:
 - **midllewares** { array | object } standard express middlewares list. `default: {}` 
 
 #### Session
-Based on `express-session` and `connect-mongo` session module.  
 Exports `session` object: 
 ```javascript
 session: {
@@ -101,7 +100,7 @@ session: {
 }
 ```
 Takes options:
-- **store**: active store. `default: osnova.opts.core.session.key`
+- **store**: session store. `default:` provided by `connect-mongo` and `express-session`
 - **key**: session key. `default: osnova.opts.core.session.key`
 - **secret**: session secret string. `default: osnova.opts.core.session.secret`
 - **connection**: connection to MongoDB. `default: osnova.mongo.connection`
