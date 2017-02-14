@@ -40,7 +40,7 @@ const addCoreModule = (osnova, moduleName) => {
   const usageOpts = osnova.opts.core.modules[moduleName];
   const isUsageObject = isObject(usageOpts);
 
-  if ((isUsageObject && usageOpts.use == true) || usageOpts == true) {
+  if ((isUsageObject && usageOpts.use != false) || usageOpts == true) {
     const modulePath = './modules/' + moduleName;
     const opts = isUsageObject ? usageOpts.opts : undefined;
 

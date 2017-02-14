@@ -78,22 +78,50 @@ These modules are built-in and will be called by default in the next order:
 
 #### Mongo
 Exports `mongo` object:
-- **connection**: current connection to MongoDB.
+```javascript
+mongo: {
+  connection // current connection to MongoDB
+}
+```
 
 #### Webserver
 Exports express application as `express` and http-server as `http`.  
-Options:
+Takes Options:
 - **compression** { boolean } if on - express will use compression middleware as the first one. `default: true`
-- **midllewares** { array | object } standard express middlewares list. `default: {}`
-#### Session
-Exports `session` object:
-- **store**: active store.
-- **key**: session key.
-- **secret**: session secret string.
+- **midllewares** { array | object } standard express middlewares list. `default: {}` 
 
+#### Session
+Based on `express-session` and `connect-mongo` session module.  
+Exports `session` object: 
+```javascript
+session: {
+  store, 
+  key,
+  secret
+}
+```
+Takes options:
+- **store**: active store. `default: osnova.opts.core.session.key`
+- **key**: session key. `default: osnova.opts.core.session.key`
+- **secret**: session secret string. `default: osnova.opts.core.session.secret`
+- **connection**: connection to MongoDB. `default: osnova.mongo.connection`
 ---
 
-Core modules can be configured by OSNOVA options object.
+Core modules can be configured in OSNOVA options object `core.modules` branch:
+
+```javascript
+const osnova = OSNOVA({
+  core: {
+    modules: {
+      webserver: {
+        use: true, //undefined `use` treats as true
+        compression: false
+      },
+      
+    }
+  }
+})
+```
 
 ### OSNOVA Options
 - **listen** { function } will be called with `osnova.http` as an argument 
