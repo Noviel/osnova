@@ -26,15 +26,8 @@ module.exports = exports = {
   },
 
   modules: {
-    express: {
-      use: true,
+    webserver: {
       compression: true
-    },
-    socketio: {
-      use: true,
-      opts: {
-        auth: false
-      }
     },
     session: true,
     communicator: true,
