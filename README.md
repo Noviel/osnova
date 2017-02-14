@@ -32,7 +32,7 @@ Every module added to OSNOVA will be called with `osnova` as an argument.
 
 The very basic module:
  ```javascript
- const myUsefullCounterModule = ({ initialCount } = { initialCount: 0 }) => osnova => {
+ const myCounter = ({ initialCount } = { initialCount: 0 }) => osnova => {
    let count = initialCount;
  
    osnova.next({ 
@@ -44,7 +44,7 @@ The very basic module:
    })    
  }
  ```
-`osnova.next({ export })` assigns `export` object to `osnova`. So `myUsefullCounter` will be available 
+`osnova.next({ export })` assigns `export` object to `osnova`. So `myCounter` will be available 
 as `osnova.counter` for other modules.
 Important moment here - `next()` is not just making available some functionality from outside. 
 It is also an indicator that module has done his business and OSNOVA should execute next one in the queue.
@@ -56,7 +56,7 @@ gain access to exports of all previous modules:
 ```javascript
 const osnova = OSNOVA({
   modules: [ 
-    myUsefullCounterModule({ initialCount: 100 }), 
+    myCounter({ initialCount: 100 }), 
     moduleWithoutOptions, 
     iCanCallPreviousModulesSafely
   ]
@@ -67,28 +67,40 @@ And then module queue will be executed. So module added by `start` can safely us
 
 ```javascript
 osnova.start((osnova) => {
-  const counter = osnova.myUsefullCounter;
+  const counter = osnova.counter;
   counter.increment();
   console.log(`Hello from OSNOVA v${osnova.getVersion()}. Count = ${counter.value()}`);
 });
 ```
 
 ### Core modules
-Without any extern modules OSNOVA provides only `express`, `http` and `mongo` components.
-    
-#### Express
-
-Exports `express`, `http`.
+These modules are built-in and will be called by default in the next order:
 
 #### Mongo
-
-Exports `mongo` with properties:
+Exports `mongo` object:
 - **connection**: current connection to MongoDB.
 
-### Options
+#### Webserver
+Exports express application as `express` and http-server as `http`.  
+Options:
+- **compression** { boolean } if on - express will use compression middleware as the first one. `default: true`
+- **midllewares** { array | object } standard express middlewares list. `default: {}`
+#### Session
+Exports `session` object:
+- **store**: active store.
+- **key**: session key.
+- **secret**: session secret string.
+
+---
+
+Core modules can be configured by OSNOVA options object.
+
+### OSNOVA Options
 - **listen** { function } will be called with `osnova.http` as an argument 
 when all modules are ready. if `undefined` of `'default'` 
 will be used built-in standard listen.
+
+- **DEBUG** { object } enable debug-messages mode for specific parts of OSNOVA. `default:` everything is off.
 
 ### Samples
  

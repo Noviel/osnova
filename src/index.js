@@ -83,7 +83,7 @@ const OSNOVA = function(opts = {}) {
 
   // process built-in core modules
   addCoreModule(this, 'mongo');
-  addCoreModule(this, 'express');
+  addCoreModule(this, 'webserver');
   addCoreModule(this, 'session');
   addCoreModule(this, 'communicator');
 

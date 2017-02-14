@@ -4,14 +4,15 @@ const Http = require('http');
 const Express = require('express');
 const compression = require('compression');
 
-const out = opts => osnova => {
-  opts = opts || {};
+const out = (opts = {
+  compression: true
+}) => osnova => {
 
   const express = Express();
   const http = Http.Server(express);
   const { assets: assetsPath } = osnova.opts.core.paths.absolute;
 
-  if (opts.compression != false) {
+  if (opts.compression == true) {
     express.use(compression());
   }
 
