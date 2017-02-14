@@ -114,10 +114,13 @@ const osnova = OSNOVA({
   core: {
     modules: {
       webserver: {
-        use: true, //undefined `use` treats as true
+        use: true,
         compression: false
       },
-      
+      mongo: {
+        //undefined `use` treats as true
+      },
+      session: false // you can just set `false` to turn off core module      
     }
   }
 })
