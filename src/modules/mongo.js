@@ -16,7 +16,10 @@ function connect(osnova) {
   } else {
     connectString = config.path + config.name;
   }
-  return mongoose.connect(connectString).connection;
+  return ((() => {
+      mongoose.connect(connectString);
+      return mongoose;
+  })()).connection;
 }
 
 const mongo = opts => osnova => {
