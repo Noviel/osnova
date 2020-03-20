@@ -17,8 +17,8 @@ function connect(osnova) {
     connectString = config.path + config.name;
   }
   return ((() => {
-      mongoose.connect(connectString);
-      return mongoose;
+    mongoose.connect(connectString);
+    return mongoose;
   })()).connection;
 }
 
